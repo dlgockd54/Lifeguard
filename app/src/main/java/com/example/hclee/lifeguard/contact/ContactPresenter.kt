@@ -1,5 +1,6 @@
 package com.example.hclee.lifeguard.contact
 
+import android.content.Context
 import android.util.Log
 import com.example.hclee.lifeguard.contact.adapter.ContactViewAdapter
 
@@ -7,13 +8,15 @@ import com.example.hclee.lifeguard.contact.adapter.ContactViewAdapter
  * Created by hclee on 2019-03-19.
  */
 
-class ContactPresenter(private val contactView: ContactContract.View): ContactContract.Presenter {
-    private val TAG: String = ContactActivity::class.java.simpleName
-    private lateinit var contactList: ArrayList<ContactData>
+class ContactPresenter(private val mContext: Context, contactView: ContactContract.View): ContactContract.Presenter {
+    private val TAG: String = ContactPresenter::class.java.simpleName
+    private val contactList: ArrayList<ContactData> = ArrayList<ContactData>()
+    private val contactTask: ContactTask
     lateinit var mAdapter: ContactViewAdapter
 
     init {
         contactView.presenter = this
+        contactTask = ContactTask(mContext, contactList)
 
         initializeContactList()
         setContactViewAdapter()
@@ -29,13 +32,9 @@ class ContactPresenter(private val contactView: ContactContract.View): ContactCo
 
     private fun initializeContactList() {
         Log.d(TAG, "initializeContactList()")
+        Log.d(TAG, "contactList.size = ${contactList.size}")
 
-        contactList = ArrayList<ContactData>()
-
-        // contact list test
-        for(i in 0..29) {
-            contactList.add(ContactData(null, "AAA", "$i"))
-        }
+        contactTask.execute()
 
         Log.d(TAG, "contactList.size = ${contactList.size}")
     }
