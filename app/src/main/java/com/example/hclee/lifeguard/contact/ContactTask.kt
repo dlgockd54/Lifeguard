@@ -5,18 +5,37 @@ import android.database.Cursor
 import android.database.Cursor.FIELD_TYPE_NULL
 import android.net.Uri
 import android.os.AsyncTask
+import android.os.Build
 import android.provider.ContactsContract
 import android.util.Log
 import android.widget.Toast
+import com.example.hclee.lifeguard.R
 
 /**
  * Created by hclee on 2019-03-21.
  */
 
-class ContactTask(private val mContext: Context, private val contactList: ArrayList<ContactData>)
+class ContactTask(private val mContext: Context, private val contactList: ArrayList<ContactData>, private val callback: ContactLoadingFinishCallback)
     : AsyncTask<Void, Int, Unit>() {
     private val TAG: String = ContactTask::class.java.simpleName
     private var cursorCount: Int = 0
+    private lateinit var mDialog: CustomDialog
+
+    override fun onPreExecute() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mDialog = CustomDialog(mContext).apply {
+                setCancelable(false)
+                setContentView(R.layout.custom_dialog)
+                create()
+            }
+        }
+
+        mDialog.show()
+
+        Log.d(TAG, "isShowing(): ${mDialog.isShowing}")
+
+        super.onPreExecute()
+    }
 
     /**
      * Only doInBackground() method runs on worker thread, others on main thread.
@@ -61,10 +80,24 @@ class ContactTask(private val mContext: Context, private val contactList: ArrayL
         }
     }
 
+    // Update contact loading progress as a dialog using progress bar
     override fun onProgressUpdate(vararg values: Int?) {
-        // Update progress as a progress bar
+        var progressValue: Int = 0
 
+        values[0].let {
+            progressValue = it?.times(100)!! / cursorCount
+        }
 
+        Log.d(TAG, "values[0]: ${values[0]}")
+        Log.d(TAG, "progressValue: $progressValue")
+
+        mDialog.let {
+            mDialog.setProgress(progressValue)
+
+            if (!mDialog.isShowing) {
+                mDialog.show()
+            }
+        }
     }
 
     override fun onPostExecute(result: Unit?) {
@@ -73,5 +106,13 @@ class ContactTask(private val mContext: Context, private val contactList: ArrayL
         Log.d(TAG, "Contact data pulling done!")
 
         Toast.makeText(mContext, "Contact data pulling done!", Toast.LENGTH_SHORT).show()
+
+        mDialog.let {
+            if (mDialog.isShowing) {
+                mDialog.dismiss()
+            }
+        }
+
+        callback.onContactLoadingFinished()
     }
 }

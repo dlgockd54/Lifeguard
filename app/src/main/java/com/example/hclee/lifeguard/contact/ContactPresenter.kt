@@ -1,6 +1,7 @@
 package com.example.hclee.lifeguard.contact
 
 import android.content.Context
+import android.os.AsyncTask
 import android.util.Log
 import com.example.hclee.lifeguard.contact.adapter.ContactViewAdapter
 
@@ -8,7 +9,11 @@ import com.example.hclee.lifeguard.contact.adapter.ContactViewAdapter
  * Created by hclee on 2019-03-19.
  */
 
-class ContactPresenter(private val mContext: Context, contactView: ContactContract.View): ContactContract.Presenter {
+interface ContactLoadingFinishCallback {
+    fun onContactLoadingFinished()
+}
+
+class ContactPresenter(private val mContext: Context, val contactView: ContactContract.View): ContactContract.Presenter {
     private val TAG: String = ContactPresenter::class.java.simpleName
     private val contactList: ArrayList<ContactData> = ArrayList<ContactData>()
     private val contactTask: ContactTask
@@ -16,10 +21,13 @@ class ContactPresenter(private val mContext: Context, contactView: ContactContra
 
     init {
         contactView.presenter = this
-        contactTask = ContactTask(mContext, contactList)
+        contactTask = ContactTask(mContext, contactList, object: ContactLoadingFinishCallback {
+            override fun onContactLoadingFinished() {
+                setContactViewAdapter()
+            }
+        })
 
         initializeContactList()
-        setContactViewAdapter()
     }
 
     override fun showContactList() {
@@ -39,9 +47,11 @@ class ContactPresenter(private val mContext: Context, contactView: ContactContra
         Log.d(TAG, "contactList.size = ${contactList.size}")
     }
 
-    private fun setContactViewAdapter() {
+    fun setContactViewAdapter() {
         Log.d(TAG, "setContactViewAdapter()")
+        Log.d(TAG, "contactList.size() = ${contactList.size}")
 
         mAdapter = ContactViewAdapter(contactList)
+        (contactView as ContactActivity).mRecyclerView.adapter = mAdapter
     }
 }

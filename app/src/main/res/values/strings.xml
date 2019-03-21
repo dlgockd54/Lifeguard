@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Lifeguard</string>
+    <string name="contact_loading">Loading your contacts...</string>
+    <string name="contact_load_done">Done!</string>
 </resources>

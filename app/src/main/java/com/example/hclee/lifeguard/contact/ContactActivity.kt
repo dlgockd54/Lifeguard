@@ -16,8 +16,8 @@ class ContactActivity : AppCompatActivity(), ContactContract.View {
     override lateinit var presenter: ContactContract.Presenter
 
     private lateinit var mContext: Context
-    private lateinit var mRecyclerView: RecyclerView
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
+    lateinit var mRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,14 +30,13 @@ class ContactActivity : AppCompatActivity(), ContactContract.View {
 
     private fun init() {
         mContext = applicationContext
-        presenter = ContactPresenter(mContext, this)
+        presenter = ContactPresenter(this, this)
         mLayoutManager = LinearLayoutManager(this).apply {
             orientation = LinearLayoutManager.VERTICAL
         }
         mRecyclerView = recycler_view.apply {
             setHasFixedSize(true)
             layoutManager = mLayoutManager
-            adapter = (presenter as ContactPresenter).mAdapter
         }
     }
 
