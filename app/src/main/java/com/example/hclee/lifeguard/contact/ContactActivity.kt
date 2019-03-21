@@ -30,7 +30,7 @@ class ContactActivity : AppCompatActivity(), ContactContract.View {
 
     private fun init() {
         mContext = applicationContext
-        presenter = ContactPresenter(this)
+        presenter = ContactPresenter(mContext, this)
         mLayoutManager = LinearLayoutManager(this).apply {
             orientation = LinearLayoutManager.VERTICAL
         }
