@@ -56,7 +56,7 @@ class ContactPresenter(private val mContext: Context, val contactView: ContactCo
         Log.d(TAG, "setContactViewAdapter()")
         Log.d(TAG, "contactList.size() = ${contactList.size}")
 
-        mAdapter = ContactViewAdapter(contactList)
+        mAdapter = ContactViewAdapter(mContext, contactList)
         (contactView as ContactActivity).mRecyclerView.adapter = mAdapter
     }
 }

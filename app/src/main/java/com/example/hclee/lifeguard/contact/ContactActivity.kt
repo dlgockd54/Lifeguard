@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import com.example.hclee.lifeguard.R
-import com.example.hclee.lifeguard.contact.adapter.ContactViewAdapter
 import kotlinx.android.synthetic.main.activity_contact.*
 
 class ContactActivity : AppCompatActivity(), ContactContract.View {
