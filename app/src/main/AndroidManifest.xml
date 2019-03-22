@@ -21,8 +21,6 @@
         </activity>
         <activity android:name=".contact.ContactActivity">
         </activity>
-        <activity android:name=".TestDialog">
-        </activity>
     </application>
 
 </manifest>
