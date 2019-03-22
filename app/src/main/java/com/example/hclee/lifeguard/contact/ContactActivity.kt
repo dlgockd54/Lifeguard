@@ -3,6 +3,7 @@ package com.example.hclee.lifeguard.contact
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -16,6 +17,7 @@ class ContactActivity : AppCompatActivity(), ContactContract.View {
     override lateinit var presenter: ContactContract.Presenter
 
     private lateinit var mContext: Context
+    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     lateinit var mRecyclerView: RecyclerView
 
@@ -30,6 +32,15 @@ class ContactActivity : AppCompatActivity(), ContactContract.View {
 
     private fun init() {
         mContext = applicationContext
+        mSwipeRefreshLayout = swipe_layout.apply {
+            setOnRefreshListener{
+                Log.d(TAG, "onRefresh()")
+
+                presenter.refreshContactList()
+
+                isRefreshing = false // After refresh, inform the view should not refresh anymore
+            }
+        }
         presenter = ContactPresenter(this, this)
         mLayoutManager = LinearLayoutManager(this).apply {
             orientation = LinearLayoutManager.VERTICAL
@@ -50,8 +61,6 @@ class ContactActivity : AppCompatActivity(), ContactContract.View {
         super.onResume()
 
         Log.d(TAG, "onResume()")
-
-        presenter.showContactList()
     }
 
     override fun onPause() {

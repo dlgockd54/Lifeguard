@@ -14,6 +14,6 @@ interface ContactContract {
     }
 
     interface Presenter: BasePresenter {
-        fun showContactList()
+        fun refreshContactList()
     }
 }

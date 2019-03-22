@@ -15,33 +15,38 @@ interface ContactLoadingFinishCallback {
 
 class ContactPresenter(private val mContext: Context, val contactView: ContactContract.View): ContactContract.Presenter {
     private val TAG: String = ContactPresenter::class.java.simpleName
-    private val contactList: ArrayList<ContactData> = ArrayList<ContactData>()
-    private val contactTask: ContactTask
+    private val contactList: ArrayList<ContactData>
+    private lateinit var contactTask: ContactTask
     lateinit var mAdapter: ContactViewAdapter
 
     init {
         contactView.presenter = this
+        contactList = ArrayList<ContactData>()
+
+        initializeContactList()
+    }
+
+    override fun refreshContactList() {
+        Log.d(TAG, "refreshContactList()")
+
+        contactList.clear() // Clear all data of the list
         contactTask = ContactTask(mContext, contactList, object: ContactLoadingFinishCallback {
             override fun onContactLoadingFinished() {
                 setContactViewAdapter()
             }
         })
-
-        initializeContactList()
-    }
-
-    override fun showContactList() {
-        Log.d(TAG, "showContactList()")
-
-        contactList.let {
-
-        }
+        contactTask.execute()
     }
 
     private fun initializeContactList() {
         Log.d(TAG, "initializeContactList()")
-        Log.d(TAG, "contactList.size = ${contactList.size}")
 
+        contactList.clear()
+        contactTask = ContactTask(mContext, contactList, object: ContactLoadingFinishCallback {
+            override fun onContactLoadingFinished() {
+                setContactViewAdapter()
+            }
+        })
         contactTask.execute()
 
         Log.d(TAG, "contactList.size = ${contactList.size}")
