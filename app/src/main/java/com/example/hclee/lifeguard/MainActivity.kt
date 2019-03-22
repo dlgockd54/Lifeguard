@@ -11,7 +11,8 @@ import com.example.hclee.lifeguard.contact.ContactActivity
 
 class MainActivity : AppCompatActivity() {
     private val TAG: String = MainActivity::class.java.simpleName
-    private val permissionList: Array<String> = arrayOf(Manifest.permission.READ_CONTACTS)
+    private val permissionList: Array<String> = arrayOf(Manifest.permission.READ_CONTACTS,
+        Manifest.permission.CALL_PHONE)
     private val PERMISSION_REQUEST_CODE: Int = 80
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +30,8 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         Log.d(TAG, "onRequestPermissionResult()")
 
+        val intent: Intent = Intent(applicationContext, ContactActivity::class.java)
+
         if(requestCode == PERMISSION_REQUEST_CODE) {
             for(result in grantResults) {
                 if(result == PackageManager.PERMISSION_DENIED) {
@@ -38,6 +41,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        startActivity(intent)
     }
 
     override fun onStart() {
@@ -50,10 +55,6 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         Log.d(TAG, "onResume()")
-
-        val intent: Intent = Intent(applicationContext, ContactActivity::class.java)
-
-        startActivity(intent)
     }
 
     override fun onPause() {
