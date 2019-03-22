@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -18,6 +19,7 @@ class ContactActivity : AppCompatActivity(), ContactContract.View {
     private lateinit var mContext: Context
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
+    private lateinit var mDividerItemDecoration: DividerItemDecoration
     lateinit var mRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,9 +46,11 @@ class ContactActivity : AppCompatActivity(), ContactContract.View {
         mLayoutManager = LinearLayoutManager(this).apply {
             orientation = LinearLayoutManager.VERTICAL
         }
+        mDividerItemDecoration = DividerItemDecoration(applicationContext, LinearLayoutManager(this).orientation)
         mRecyclerView = recycler_view.apply {
             setHasFixedSize(true)
             layoutManager = mLayoutManager
+            addItemDecoration(mDividerItemDecoration)
         }
     }
 
