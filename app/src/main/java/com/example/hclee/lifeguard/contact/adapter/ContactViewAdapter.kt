@@ -45,20 +45,26 @@ class ContactViewAdapter(private val mContext: Context, private val contactList:
                     Log.d(TAG, "onLongClick()")
                     Log.d(TAG, "name: ${holder.nameTextView.text}, phoneNumber: ${holder.phoneNumberTextView.text}")
 
-                    val telData: String = "tel: ${holder.phoneNumberTextView.text}"
-                    val intent: Intent = Intent(Intent.ACTION_CALL)
+                    val phoneNumber: String = (holder.phoneNumberTextView.text).toString()
 
-                    intent.data = Uri.parse(telData)
-
-                    try {
-                        mContext.startActivity(intent)
-                    } catch(e: SecurityException) {
-                        e.printStackTrace()
-                    }
+                    callClickedPerson(phoneNumber)
 
                     return true
                 }
             })
+        }
+    }
+
+    private fun callClickedPerson(phoneNumber: String) {
+        val telData: String = "tel: $phoneNumber"
+        val intent: Intent = Intent(Intent.ACTION_CALL)
+
+        intent.data = Uri.parse(telData)
+
+        try {
+            mContext.startActivity(intent)
+        } catch(e: SecurityException) {
+            e.printStackTrace()
         }
     }
 
