@@ -1,4 +1,4 @@
-package com.example.hclee.lifeguard.contact.adapter
+package com.example.hclee.lifeguard.contacts.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -11,35 +11,35 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.hclee.lifeguard.R
-import com.example.hclee.lifeguard.contact.ContactData
+import com.example.hclee.lifeguard.contacts.ContactsData
 
 /**
  * Created by hclee on 2019-03-19.
  */
 
-class ContactViewAdapter(private val mContext: Context, private val contactList: List<ContactData>): RecyclerView.Adapter<ContactViewAdapter.ContactViewHolder>() {
-    private val TAG: String = ContactViewAdapter::class.java.simpleName
+class ContactsViewAdapter(private val mContext: Context, private val mContactsList: List<ContactsData>): RecyclerView.Adapter<ContactsViewAdapter.ContactsViewHolder>() {
+    private val TAG: String = ContactsViewAdapter::class.java.simpleName
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ContactViewAdapter.ContactViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ContactsViewAdapter.ContactsViewHolder {
         Log.d(TAG, "onCreateViewHolder()")
 
         val view: View = LayoutInflater.from(parent?.context).inflate(R.layout.item, parent, false)
-        val viewHolder: ContactViewAdapter.ContactViewHolder = ContactViewAdapter.ContactViewHolder(view)
+        val viewHolder: ContactsViewAdapter.ContactsViewHolder = ContactsViewAdapter.ContactsViewHolder(view)
 
         return viewHolder
     }
 
     override fun getItemCount(): Int {
-        return contactList.size
+        return mContactsList.size
     }
 
-    override fun onBindViewHolder(holder: ContactViewAdapter.ContactViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ContactsViewAdapter.ContactsViewHolder?, position: Int) {
         Log.d(TAG, "onBindViewHolder()")
 
         holder?.let {
-            it.profileImageView.setImageDrawable(contactList[position].profileThumbnail)
-            it.nameTextView.text = contactList[position].name
-            it.phoneNumberTextView.text = contactList[position].phoneNumber
+            it.profileImageView.setImageDrawable(mContactsList[position].mProfileThumbnail)
+            it.nameTextView.text = mContactsList[position].mName
+            it.phoneNumberTextView.text = mContactsList[position].mPhoneNumber
             it.itemView.setOnLongClickListener(object: View.OnLongClickListener {
                 override fun onLongClick(v: View?): Boolean {
                     Log.d(TAG, "onLongClick()")
@@ -68,7 +68,7 @@ class ContactViewAdapter(private val mContext: Context, private val contactList:
         }
     }
 
-    class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ContactsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profileImageView: ImageView = itemView.findViewById(R.id.iv_profile)
         val nameTextView: TextView = itemView.findViewById(R.id.tv_name)
         val phoneNumberTextView: TextView = itemView.findViewById(R.id.tv_phone_number)

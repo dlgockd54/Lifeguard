@@ -7,7 +7,7 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.example.hclee.lifeguard.contact.ContactActivity
+import com.example.hclee.lifeguard.contacts.ContactsActivity
 
 class MainActivity : AppCompatActivity() {
     private val TAG: String = MainActivity::class.java.simpleName
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         Log.d(TAG, "onRequestPermissionResult()")
 
-        val intent: Intent = Intent(applicationContext, ContactActivity::class.java)
+        val intent: Intent = Intent(applicationContext, ContactsActivity::class.java)
 
         if(requestCode == PERMISSION_REQUEST_CODE) {
             for(result in grantResults) {

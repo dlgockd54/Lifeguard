@@ -1,4 +1,4 @@
-package com.example.hclee.lifeguard.contact
+package com.example.hclee.lifeguard.contacts
 
 import android.content.Context
 import android.database.Cursor
@@ -6,7 +6,6 @@ import android.database.Cursor.FIELD_TYPE_NULL
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
-import android.provider.ContactsContract
 import android.util.Log
 import android.widget.Toast
 import com.example.hclee.lifeguard.R
@@ -15,9 +14,9 @@ import com.example.hclee.lifeguard.R
  * Created by hclee on 2019-03-21.
  */
 
-class ContactTask(private val mContext: Context, private val contactList: ArrayList<ContactData>, private val callback: ContactLoadingFinishCallback)
+class ContactsTask(private val mContext: Context, private val mContactsList: ArrayList<ContactsData>, private val callback: ContactsLoadingFinishCallback)
     : AsyncTask<Void, Int, Unit>() {
-    private val TAG: String = ContactTask::class.java.simpleName
+    private val TAG: String = ContactsTask::class.java.simpleName
     private var cursorCount: Int = 0
     private lateinit var mDialog: CustomDialog
 
@@ -41,17 +40,17 @@ class ContactTask(private val mContext: Context, private val contactList: ArrayL
      * Only doInBackground() method runs on worker thread, others on main thread.
      */
     override fun doInBackground(vararg params: Void?) {
-        val uri: Uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+        val uri: Uri = android.provider.ContactsContract.CommonDataKinds.Phone.CONTENT_URI
         val projection: Array<String> = arrayOf(
-            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI // Columns to extract
-            , ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
-            , ContactsContract.CommonDataKinds.Phone.NUMBER)
+            android.provider.ContactsContract.Contacts.PHOTO_THUMBNAIL_URI // Columns to extract
+            , android.provider.ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
+            , android.provider.ContactsContract.CommonDataKinds.Phone.NUMBER)
         val selection: String? = null // SQL WHERE clause
         val selectionArgs: Array<String>? = null
-        val sortOrder: String = "${ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} COLLATE LOCALIZED ASC" // SQL ORDER BY clause
+        val sortOrder: String = "${android.provider.ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} COLLATE LOCALIZED ASC" // SQL ORDER BY clause
         var progress: Int = 1
 
-        val cursor: Cursor =  mContext.contentResolver.query(uri, // Extract contact data from DB
+        val cursor: Cursor =  mContext.contentResolver.query(uri, // Extract contacts data from DB
             projection,
             selection,
             selectionArgs,
@@ -65,7 +64,7 @@ class ContactTask(private val mContext: Context, private val contactList: ArrayL
             val drawableType: Int = cursor.getType(0)
             val name: String = cursor.getString(1)
             val phoneNumber: String = cursor.getString(2)
-            val contactData: ContactData = ContactData(null, name, phoneNumber)
+            val contactsData: ContactsData = ContactsData(null, name, phoneNumber)
 
             Log.d(TAG, "${cursor.columnCount}")
             Log.d(TAG, "type: $drawableType, name: $name, phoneNumber: $phoneNumber")
@@ -74,13 +73,13 @@ class ContactTask(private val mContext: Context, private val contactList: ArrayL
 
             }
 
-            contactList.add(contactData)
+            mContactsList.add(contactsData)
 
             publishProgress(progress++)
         }
     }
 
-    // Update contact loading progress as a dialog using progress bar
+    // Update contacts loading progress as a dialog using progress bar
     override fun onProgressUpdate(vararg values: Int?) {
         var progressValue: Int = 0
 
@@ -103,9 +102,9 @@ class ContactTask(private val mContext: Context, private val contactList: ArrayL
     override fun onPostExecute(result: Unit?) {
         super.onPostExecute(result)
 
-        Log.d(TAG, "Contact data pulling done!")
+        Log.d(TAG, "Contacts data pulling done!")
 
-        Toast.makeText(mContext, "Contact data pulling done!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(mContext, "Contacts data pulling done!", Toast.LENGTH_SHORT).show()
 
         mDialog.let {
             if (mDialog.isShowing) {
@@ -113,6 +112,6 @@ class ContactTask(private val mContext: Context, private val contactList: ArrayL
             }
         }
 
-        callback.onContactLoadingFinished()
+        callback.onContactsLoadingFinished()
     }
 }

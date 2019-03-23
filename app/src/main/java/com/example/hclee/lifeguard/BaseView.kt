@@ -5,5 +5,5 @@ package com.example.hclee.lifeguard
  */
 
 interface BaseView<T> {
-    var presenter: T
+    var mPresenter: T
 }

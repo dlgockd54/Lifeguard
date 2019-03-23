@@ -1,4 +1,4 @@
-package com.example.hclee.lifeguard.contact
+package com.example.hclee.lifeguard.contacts
 
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
@@ -11,10 +11,10 @@ import android.util.Log
 import com.example.hclee.lifeguard.R
 import kotlinx.android.synthetic.main.activity_contact.*
 
-class ContactActivity : AppCompatActivity(), ContactContract.View {
-    private val TAG: String = ContactActivity::class.java.simpleName
+class ContactsActivity : AppCompatActivity(), ContactsContract.View {
+    private val TAG: String = ContactsActivity::class.java.simpleName
 
-    override lateinit var presenter: ContactContract.Presenter
+    override lateinit var mPresenter: ContactsContract.Presenter
 
     private lateinit var mContext: Context
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
@@ -37,12 +37,12 @@ class ContactActivity : AppCompatActivity(), ContactContract.View {
             setOnRefreshListener{
                 Log.d(TAG, "onRefresh()")
 
-                presenter.refreshContactList()
+                mPresenter.refreshContactsList()
 
                 isRefreshing = false // After refresh, inform the view should not refresh anymore
             }
         }
-        presenter = ContactPresenter(this, this)
+        mPresenter = ContactsPresenter(this, this)
         mLayoutManager = LinearLayoutManager(this).apply {
             orientation = LinearLayoutManager.VERTICAL
         }

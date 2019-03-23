@@ -1,4 +1,4 @@
-package com.example.hclee.lifeguard.contact
+package com.example.hclee.lifeguard.contacts
 
 import android.app.Dialog
 import android.content.Context
