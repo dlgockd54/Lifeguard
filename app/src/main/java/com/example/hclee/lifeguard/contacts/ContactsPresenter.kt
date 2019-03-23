@@ -50,7 +50,7 @@ class ContactsPresenter(private val mContext: Context, val mContactsView: Contac
         Log.d(TAG, "contactsList.size = ${mContactsList.size}")
     }
 
-    fun setContactsViewAdapter() {
+    private fun setContactsViewAdapter() {
         Log.d(TAG, "setContactsViewAdapter()")
         Log.d(TAG, "contactsList.size() = ${mContactsList.size}")
 
