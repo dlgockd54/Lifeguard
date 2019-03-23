@@ -58,7 +58,7 @@ class ContactsPresenter(private val mContext: Context, val mContactsView: Contac
         (mContactsView as ContactsActivity).mRecyclerView.adapter = mAdapter
     }
 
-    fun notifyChange() {
+    override fun notifyChange() {
         (mContactsView as ContactsActivity).setIsNeedToUpdateContactsList(true)
     }
 }

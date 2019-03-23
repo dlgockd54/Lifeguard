@@ -14,5 +14,6 @@ interface ContactsContract {
 
     interface Presenter: BasePresenter {
         fun refreshContactsList()
+        fun notifyChange()
     }
 }
