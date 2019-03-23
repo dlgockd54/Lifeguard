@@ -21,6 +21,7 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private lateinit var mDividerItemDecoration: DividerItemDecoration
     lateinit var mRecyclerView: RecyclerView
+    var isNeedToUpdateContactsList: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +55,10 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
         }
     }
 
+    fun setIsNeedToUpdateContactsList(need: Boolean) {
+        isNeedToUpdateContactsList = need
+    }
+
     override fun onStart() {
         super.onStart()
 
@@ -64,6 +69,12 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
         super.onResume()
 
         Log.d(TAG, "onResume()")
+
+        if(isNeedToUpdateContactsList) {
+            mPresenter.refreshContactsList()
+
+            setIsNeedToUpdateContactsList(false)
+        }
     }
 
     override fun onPause() {

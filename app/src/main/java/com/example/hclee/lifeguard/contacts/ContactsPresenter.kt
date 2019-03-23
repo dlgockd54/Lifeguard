@@ -15,13 +15,14 @@ interface ContactsLoadingFinishCallback {
 class ContactsPresenter(private val mContext: Context, val mContactsView: ContactsContract.View): ContactsContract.Presenter {
     private val TAG: String = ContactsPresenter::class.java.simpleName
     private val mContactsList: ArrayList<ContactsData>
+    private val mContactsObserverManager: ContactsObserverManager
     private lateinit var mContactsTask: ContactsTask
-    private lateinit var mContactsObserver: ContactsObserver
     lateinit var mAdapter: ContactsViewAdapter
 
     init {
         mContactsView.mPresenter = this
         mContactsList = ArrayList<ContactsData>()
+        mContactsObserverManager = ContactsObserverManager(mContext, this)
 
         initializeContactsList()
     }
@@ -58,5 +59,9 @@ class ContactsPresenter(private val mContext: Context, val mContactsView: Contac
 
         mAdapter = ContactsViewAdapter(mContext, mContactsList)
         (mContactsView as ContactsActivity).mRecyclerView.adapter = mAdapter
+    }
+
+    fun notifyChange() {
+        (mContactsView as ContactsActivity).setIsNeedToUpdateContactsList(true)
     }
 }
