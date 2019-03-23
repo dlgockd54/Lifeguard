@@ -16,6 +16,11 @@ class ContactsPresenter(private val mContext: Context, val mContactsView: Contac
     private val TAG: String = ContactsPresenter::class.java.simpleName
     private val mContactsList: ArrayList<ContactsData>
     private val mContactsObserverManager: ContactsObserverManager
+    private val mCallback: ContactsLoadingFinishCallback = object: ContactsLoadingFinishCallback {
+        override fun onContactsLoadingFinished() {
+            setContactsViewAdapter()
+        }
+    }
     private lateinit var mContactsTask: ContactsTask
     lateinit var mAdapter: ContactsViewAdapter
 
@@ -31,11 +36,7 @@ class ContactsPresenter(private val mContext: Context, val mContactsView: Contac
         Log.d(TAG, "refreshContactsList()")
 
         mContactsList.clear() // Clear all data of the list
-        mContactsTask = ContactsTask(mContext, mContactsList, object: ContactsLoadingFinishCallback {
-            override fun onContactsLoadingFinished() {
-                setContactsViewAdapter()
-            }
-        })
+        mContactsTask = ContactsTask(mContext, mContactsList, mCallback)
         mContactsTask.execute()
     }
 
@@ -43,11 +44,7 @@ class ContactsPresenter(private val mContext: Context, val mContactsView: Contac
         Log.d(TAG, "initializeContactsList()")
 
         mContactsList.clear()
-        mContactsTask = ContactsTask(mContext, mContactsList, object: ContactsLoadingFinishCallback {
-            override fun onContactsLoadingFinished() {
-                setContactsViewAdapter()
-            }
-        })
+        mContactsTask = ContactsTask(mContext, mContactsList, mCallback)
         mContactsTask.execute()
 
         Log.d(TAG, "contactsList.size = ${mContactsList.size}")
