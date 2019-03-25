@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.daimajia.swipe.SwipeLayout
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.contacts.ContactsData
 
@@ -19,11 +20,14 @@ import com.example.hclee.lifeguard.contacts.ContactsData
 
 class ContactsViewAdapter(private val mContext: Context, private val mContactsList: List<ContactsData>): RecyclerView.Adapter<ContactsViewAdapter.ContactsViewHolder>() {
     private val TAG: String = ContactsViewAdapter::class.java.simpleName
+    private val mSwipeListener: SwipeListenerImpl = SwipeListenerImpl()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ContactsViewAdapter.ContactsViewHolder {
         Log.d(TAG, "onCreateViewHolder()")
 
-        val view: View = LayoutInflater.from(parent?.context).inflate(R.layout.item, parent, false)
+        val view: View = ((LayoutInflater.from(parent?.context).inflate(R.layout.item, parent, false)) as SwipeLayout).apply {
+            addSwipeListener(mSwipeListener) // Add listener for swipe layout
+        }
         val viewHolder: ContactsViewAdapter.ContactsViewHolder = ContactsViewAdapter.ContactsViewHolder(view)
 
         return viewHolder
