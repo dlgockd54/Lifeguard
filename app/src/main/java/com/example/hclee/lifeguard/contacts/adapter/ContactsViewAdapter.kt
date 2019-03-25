@@ -21,6 +21,11 @@ import com.example.hclee.lifeguard.contacts.ContactsData
 class ContactsViewAdapter(private val mContext: Context, private val mContactsList: List<ContactsData>): RecyclerView.Adapter<ContactsViewAdapter.ContactsViewHolder>() {
     private val TAG: String = ContactsViewAdapter::class.java.simpleName
     private val mSwipeListener: SwipeListenerImpl = SwipeListenerImpl()
+    private val mViewHolderList: ArrayList<ContactsViewHolder>
+
+    init {
+        mViewHolderList = ArrayList<ContactsViewHolder>()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ContactsViewAdapter.ContactsViewHolder {
         Log.d(TAG, "onCreateViewHolder()")
@@ -28,7 +33,28 @@ class ContactsViewAdapter(private val mContext: Context, private val mContactsLi
         val view: View = ((LayoutInflater.from(parent?.context).inflate(R.layout.item, parent, false)) as SwipeLayout).apply {
             addSwipeListener(mSwipeListener) // Add listener for swipe layout
         }
-        val viewHolder: ContactsViewAdapter.ContactsViewHolder = ContactsViewAdapter.ContactsViewHolder(view)
+        val viewHolder: ContactsViewAdapter.ContactsViewHolder = ContactsViewAdapter.ContactsViewHolder(view).apply {
+            itemView.run {
+                setOnClickListener {
+                    closeAllItem()
+                }
+
+                setOnLongClickListener(object: View.OnLongClickListener {
+                    override fun onLongClick(v: View?): Boolean {
+                        Log.d(TAG, "onLongClick()")
+                        Log.d(TAG, "name: ${nameTextView.text}, phoneNumber: ${phoneNumberTextView.text}")
+
+                        val phoneNumber: String = (phoneNumberTextView.text).toString()
+
+                        callClickedPerson(phoneNumber)
+
+                        return true
+                    }
+                })
+            }
+        }
+
+        mViewHolderList.add(viewHolder) // Everytime viewholder created, add the holder to mViewHolderList
 
         return viewHolder
     }
@@ -44,18 +70,21 @@ class ContactsViewAdapter(private val mContext: Context, private val mContactsLi
             it.profileImageView.setImageDrawable(mContactsList[position].mProfileThumbnail)
             it.nameTextView.text = mContactsList[position].mName
             it.phoneNumberTextView.text = mContactsList[position].mPhoneNumber
-            it.itemView.setOnLongClickListener(object: View.OnLongClickListener {
-                override fun onLongClick(v: View?): Boolean {
-                    Log.d(TAG, "onLongClick()")
-                    Log.d(TAG, "name: ${holder.nameTextView.text}, phoneNumber: ${holder.phoneNumberTextView.text}")
+        }
+    }
 
-                    val phoneNumber: String = (holder.phoneNumberTextView.text).toString()
+    /**
+     * Close all item what status is SwipeLayout.Status.OPEN
+     */
+    private fun closeAllItem() {
+        Log.d(TAG, "closeAllItem()")
 
-                    callClickedPerson(phoneNumber)
-
-                    return true
+        for(viewHolder: ContactsViewHolder in mViewHolderList) {
+            viewHolder.itemView.let {
+                if((it as SwipeLayout).openStatus == SwipeLayout.Status.Open) {
+                    it.close()
                 }
-            })
+            }
         }
     }
 
