@@ -8,7 +8,9 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.View
 import com.example.hclee.lifeguard.R
+import com.example.hclee.lifeguard.contacts.adapter.ContactsViewAdapter
 import kotlinx.android.synthetic.main.activity_contacts.*
 
 class ContactsActivity : AppCompatActivity(), ContactsContract.View {
@@ -22,6 +24,7 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
     private lateinit var mDividerItemDecoration: DividerItemDecoration
     private var mIsNeedToUpdateContactsList: Boolean = false
     lateinit var mRecyclerView: RecyclerView
+    private lateinit var mAdapter: ContactsViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +56,11 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
             layoutManager = mLayoutManager
             addItemDecoration(mDividerItemDecoration)
         }
+    }
+
+    override fun updateContactsViewAdapter() {
+        mAdapter = ContactsViewAdapter(this, (mPresenter as ContactsPresenter).getContactsList())
+        mRecyclerView.adapter = mAdapter
     }
 
     override fun setIsNeedToUpdateContactsList(need: Boolean) {

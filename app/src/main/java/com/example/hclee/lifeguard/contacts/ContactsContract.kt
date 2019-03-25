@@ -10,10 +10,12 @@ import com.example.hclee.lifeguard.BaseView
 interface ContactsContract {
     interface View: BaseView<Presenter> {
         fun setIsNeedToUpdateContactsList(need: Boolean)
+        fun updateContactsViewAdapter()
     }
 
     interface Presenter: BasePresenter {
         fun refreshContactsList()
         fun notifyChange()
+        fun getContactsList(): ArrayList<ContactsData>
     }
 }

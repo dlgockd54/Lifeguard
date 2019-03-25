@@ -2,7 +2,6 @@ package com.example.hclee.lifeguard.contacts
 
 import android.content.Context
 import android.util.Log
-import com.example.hclee.lifeguard.contacts.adapter.ContactsViewAdapter
 
 /**
  * Created by hclee on 2019-03-19.
@@ -18,11 +17,10 @@ class ContactsPresenter(private val mContext: Context, val mContactsView: Contac
     private val mContactsObserverManager: ContactsObserverManager
     private val mCallback: ContactsLoadingFinishCallback = object: ContactsLoadingFinishCallback {
         override fun onContactsLoadingFinished() {
-            setContactsViewAdapter()
+            updateContactsViewAdapter()
         }
     }
     private lateinit var mContactsTask: ContactsTask
-    private lateinit var mAdapter: ContactsViewAdapter
 
     init {
         mContactsList = ArrayList<ContactsData>()
@@ -49,13 +47,15 @@ class ContactsPresenter(private val mContext: Context, val mContactsView: Contac
         Log.d(TAG, "contactsList.size = ${mContactsList.size}")
     }
 
-    private fun setContactsViewAdapter() {
-        Log.d(TAG, "setContactsViewAdapter()")
+    override fun getContactsList(): ArrayList<ContactsData> {
+        return mContactsList
+    }
+
+    private fun updateContactsViewAdapter() {
+        Log.d(TAG, "updateContactsViewAdapter()")
         Log.d(TAG, "contactsList.size() = ${mContactsList.size}")
 
-        mContactsView as ContactsActivity
-        mAdapter = ContactsViewAdapter(mContext, mContactsList)
-        mContactsView.mRecyclerView.adapter = mAdapter
+        (mContactsView as ContactsActivity).updateContactsViewAdapter()
     }
 
     override fun notifyChange() {
