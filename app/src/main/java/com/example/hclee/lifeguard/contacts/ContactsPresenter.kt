@@ -22,10 +22,9 @@ class ContactsPresenter(private val mContext: Context, val mContactsView: Contac
         }
     }
     private lateinit var mContactsTask: ContactsTask
-    lateinit var mAdapter: ContactsViewAdapter
+    private lateinit var mAdapter: ContactsViewAdapter
 
     init {
-        mContactsView.mPresenter = this
         mContactsList = ArrayList<ContactsData>()
         mContactsObserverManager = ContactsObserverManager(mContext, this)
 
@@ -54,8 +53,9 @@ class ContactsPresenter(private val mContext: Context, val mContactsView: Contac
         Log.d(TAG, "setContactsViewAdapter()")
         Log.d(TAG, "contactsList.size() = ${mContactsList.size}")
 
+        mContactsView as ContactsActivity
         mAdapter = ContactsViewAdapter(mContext, mContactsList)
-        (mContactsView as ContactsActivity).mRecyclerView.adapter = mAdapter
+        mContactsView.mRecyclerView.adapter = mAdapter
     }
 
     override fun notifyChange() {
