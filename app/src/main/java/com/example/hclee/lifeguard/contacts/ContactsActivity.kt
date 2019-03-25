@@ -9,7 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import com.example.hclee.lifeguard.R
-import kotlinx.android.synthetic.main.activity_contact.*
+import kotlinx.android.synthetic.main.activity_contacts.*
 
 class ContactsActivity : AppCompatActivity(), ContactsContract.View {
     private val TAG: String = ContactsActivity::class.java.simpleName
@@ -25,7 +25,7 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_contact)
+        setContentView(R.layout.activity_contacts)
 
         Log.d(TAG, "onCreate()")
 
@@ -55,7 +55,7 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
         }
     }
 
-    fun setIsNeedToUpdateContactsList(need: Boolean) {
+    override fun setIsNeedToUpdateContactsList(need: Boolean) {
         isNeedToUpdateContactsList = need
     }
 

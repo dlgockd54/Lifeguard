@@ -9,7 +9,7 @@ import com.example.hclee.lifeguard.BaseView
 
 interface ContactsContract {
     interface View: BaseView<Presenter> {
-
+        fun setIsNeedToUpdateContactsList(need: Boolean)
     }
 
     interface Presenter: BasePresenter {
