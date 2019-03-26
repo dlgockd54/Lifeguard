@@ -9,16 +9,19 @@
         <LinearLayout
                 android:background="#66ddff00"
                 android:id="@+id/bottom_wrapper"
-                android:layout_width="160dp"
+                android:layout_width="100dp"
                 android:weightSum="1"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:layout_height="match_parent">
 
             <!--What you want to show-->
             <TextView
+                    android:id="@+id/tv_edit_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="surface view"/>
+                    android:gravity="center"
+                    android:text="Edit Profile"/>
         </LinearLayout>
         <!-- Bottom View End-->
 
