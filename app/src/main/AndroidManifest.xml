@@ -24,6 +24,8 @@
         </activity>
         <activity android:name=".contacts.ContactsActivity">
         </activity>
+        <activity android:name=".editprofile.EditProfileActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -1,6 +1,6 @@
 package com.example.hclee.lifeguard.contacts.adapter
 
-import android.content.Context
+import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
@@ -12,13 +12,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.daimajia.swipe.SwipeLayout
 import com.example.hclee.lifeguard.R
+import com.example.hclee.lifeguard.contacts.ContactsActivity
+import com.example.hclee.lifeguard.contacts.ContactsContract
 import com.example.hclee.lifeguard.contacts.ContactsData
+import kotlinx.android.synthetic.main.item.view.*
 
 /**
  * Created by hclee on 2019-03-19.
  */
 
-class ContactsViewAdapter(private val mContext: Context, private val mContactsList: List<ContactsData>): RecyclerView.Adapter<ContactsViewAdapter.ContactsViewHolder>() {
+class ContactsViewAdapter(private val mActivity: ContactsContract.View, private val mContactsList: List<ContactsData>): RecyclerView.Adapter<ContactsViewAdapter.ContactsViewHolder>() {
     private val TAG: String = ContactsViewAdapter::class.java.simpleName
     private val mSwipeListener: SwipeListenerImpl = SwipeListenerImpl()
     private val mViewHolderList: ArrayList<ContactsViewHolder>
@@ -51,6 +54,12 @@ class ContactsViewAdapter(private val mContext: Context, private val mContactsLi
                         return true
                     }
                 })
+            }
+
+            itemView.tv_edit_profile.setOnClickListener {
+                Log.d(TAG, "tv_edit_profile click")
+
+                moveEditProfileActivity()
             }
         }
 
@@ -95,10 +104,19 @@ class ContactsViewAdapter(private val mContext: Context, private val mContactsLi
         intent.data = Uri.parse(telData)
 
         try {
-            mContext.startActivity(intent)
-        } catch(e: SecurityException) {
+            (mActivity as ContactsActivity).switchToAnotherActivity(intent)
+        } catch (e: SecurityException) {
             e.printStackTrace()
         }
+    }
+
+    private fun moveEditProfileActivity() {
+        val intent: Intent = Intent()
+        val componentName: ComponentName = ComponentName("com.example.hclee.lifeguard", "com.example.hclee.lifeguard.editprofile.EditProfileActivity")
+
+        intent.component = componentName
+
+        (mActivity as ContactsActivity).switchToAnotherActivity(intent)
     }
 
     class ContactsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

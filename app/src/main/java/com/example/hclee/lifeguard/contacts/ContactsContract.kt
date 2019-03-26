@@ -1,5 +1,6 @@
 package com.example.hclee.lifeguard.contacts
 
+import android.content.Intent
 import com.example.hclee.lifeguard.BasePresenter
 import com.example.hclee.lifeguard.BaseView
 
@@ -11,6 +12,7 @@ interface ContactsContract {
     interface View: BaseView<Presenter> {
         fun setIsNeedToUpdateContactsList(need: Boolean)
         fun updateContactsViewAdapter()
+        fun switchToAnotherActivity(intent: Intent)
     }
 
     interface Presenter: BasePresenter {

@@ -1,6 +1,8 @@
 package com.example.hclee.lifeguard.contacts
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
@@ -8,7 +10,6 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.view.View
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.contacts.adapter.ContactsViewAdapter
 import kotlinx.android.synthetic.main.activity_contacts.*
@@ -65,6 +66,11 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
 
     override fun setIsNeedToUpdateContactsList(need: Boolean) {
         mIsNeedToUpdateContactsList = need
+    }
+
+    override fun switchToAnotherActivity(intent: Intent) {
+        startActivity(intent)
+        overridePendingTransition(R.anim.animation_slide_from_right, R.anim.animation_slide_to_left) // Activity slide animation
     }
 
     override fun onStart() {
