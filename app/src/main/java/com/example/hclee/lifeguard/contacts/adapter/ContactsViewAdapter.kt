@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.daimajia.swipe.SwipeLayout
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.contacts.ContactsActivity
@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.item.view.*
  * Created by hclee on 2019-03-19.
  */
 
-class ContactsViewAdapter(private val mActivity: ContactsContract.View, private val mContactsList: List<ContactsData>): RecyclerView.Adapter<ContactsViewAdapter.ContactsViewHolder>() {
+class ContactsViewAdapter(private val mActivity: ContactsContract.View, private val mContactsList: List<ContactsData>, private val mGlideRequestManager: RequestManager): RecyclerView.Adapter<ContactsViewAdapter.ContactsViewHolder>() {
     private val TAG: String = ContactsViewAdapter::class.java.simpleName
     private val mSwipeListener: SwipeListenerImpl = SwipeListenerImpl()
     private val mViewHolderList: ArrayList<ContactsViewHolder>
@@ -77,11 +77,11 @@ class ContactsViewAdapter(private val mActivity: ContactsContract.View, private 
         Log.d(TAG, "onBindViewHolder()")
 
         holder?.let {
-//            it.profileImageView.setImageDrawable(mContactsList[position].mProfileThumbnailUri)
             Log.d(TAG, mContactsList[position].mProfileThumbnailUri.toString())
 
-            Glide.with(mActivity as ContactsActivity)
+            mGlideRequestManager
                 .load(mContactsList[position].mProfileThumbnailUri)
+                .circleCrop()
                 .into(it.profileImageView)
             it.nameTextView.text = mContactsList[position].mName
             it.phoneNumberTextView.text = mContactsList[position].mPhoneNumber

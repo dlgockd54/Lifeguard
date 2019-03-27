@@ -1,6 +1,5 @@
 package com.example.hclee.lifeguard.contacts
 
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -10,6 +9,8 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.contacts.adapter.ContactsViewAdapter
 import kotlinx.android.synthetic.main.activity_contacts.*
@@ -26,6 +27,7 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
     private var mIsNeedToUpdateContactsList: Boolean = false
     lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: ContactsViewAdapter
+    private lateinit var mGlideRequestManager: RequestManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,10 +59,11 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
             layoutManager = mLayoutManager
             addItemDecoration(mDividerItemDecoration)
         }
+        mGlideRequestManager = Glide.with(this)
     }
 
     override fun updateContactsViewAdapter() {
-        mAdapter = ContactsViewAdapter(this, (mPresenter as ContactsPresenter).getContactsList())
+        mAdapter = ContactsViewAdapter(this, (mPresenter as ContactsPresenter).getContactsList(), mGlideRequestManager)
         mRecyclerView.adapter = mAdapter
     }
 
