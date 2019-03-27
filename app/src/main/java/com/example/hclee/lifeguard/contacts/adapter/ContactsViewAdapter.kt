@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.daimajia.swipe.SwipeLayout
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.contacts.ContactsActivity
@@ -76,7 +77,12 @@ class ContactsViewAdapter(private val mActivity: ContactsContract.View, private 
         Log.d(TAG, "onBindViewHolder()")
 
         holder?.let {
-            it.profileImageView.setImageDrawable(mContactsList[position].mProfileThumbnail)
+//            it.profileImageView.setImageDrawable(mContactsList[position].mProfileThumbnailUri)
+            Log.d(TAG, mContactsList[position].mProfileThumbnailUri.toString())
+
+            Glide.with(mActivity as ContactsActivity)
+                .load(mContactsList[position].mProfileThumbnailUri)
+                .into(it.profileImageView)
             it.nameTextView.text = mContactsList[position].mName
             it.phoneNumberTextView.text = mContactsList[position].mPhoneNumber
         }
@@ -103,11 +109,7 @@ class ContactsViewAdapter(private val mActivity: ContactsContract.View, private 
 
         intent.data = Uri.parse(telData)
 
-        try {
-            (mActivity as ContactsActivity).switchToAnotherActivity(intent)
-        } catch (e: SecurityException) {
-            e.printStackTrace()
-        }
+        (mActivity as ContactsActivity).switchToAnotherActivity(intent)
     }
 
     private fun moveEditProfileActivity() {
