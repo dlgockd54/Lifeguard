@@ -35,6 +35,8 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
         Log.d(TAG, "onCreate()")
 
         init()
+
+        mPresenter.initializeContactsList()
     }
 
     private fun init() {
@@ -61,8 +63,16 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
         mGlideRequestManager = Glide.with(this)
     }
 
+    override fun getContactsTask(): ContactsTask {
+        return ContactsTask(this, mPresenter.getContactsList(), object: ContactsLoadingFinishCallback {
+            override fun onContactsLoadingFinished() {
+                mPresenter.updateContactsViewAdapter()
+            }
+        })
+    }
+
     override fun updateContactsViewAdapter() {
-        mAdapter = ContactsViewAdapter(this, (mPresenter as ContactsPresenter).getContactsList(), mGlideRequestManager)
+        mAdapter = ContactsViewAdapter(this, mPresenter.getContactsList(), mGlideRequestManager)
         mRecyclerView.adapter = mAdapter
     }
 

@@ -1,6 +1,5 @@
 package com.example.hclee.lifeguard.contacts
 
-import android.util.Log
 import com.example.hclee.lifeguard.AndroidThings
 
 /**
@@ -15,50 +14,40 @@ class ContactsPresenter(val mContactsView: ContactsContract.View, private val mA
     private val TAG: String = ContactsPresenter::class.java.simpleName
     private val mContactsList: ArrayList<ContactsData>
     private val mContactsObserverManager: ContactsObserverManager
-    private val mCallback: ContactsLoadingFinishCallback = object: ContactsLoadingFinishCallback {
-        override fun onContactsLoadingFinished() {
-            updateContactsViewAdapter()
-        }
-    }
-    private lateinit var mContactsTask: ContactsTask
 
     init {
         mContactsList = ArrayList<ContactsData>()
         mContactsObserverManager = ContactsObserverManager((mAndroidThings as ContactsAndroidThings).mContext, this)
-
-        initializeContactsList()
     }
 
     override fun refreshContactsList() {
-        Log.d(TAG, "refreshContactsList()")
+        System.out.println("refreshContactsList()")
 
         mContactsList.clear() // Clear all data of the list
-        mContactsTask = ContactsTask((mAndroidThings as ContactsAndroidThings).mContext, mContactsList, mCallback)
-        mContactsTask.execute()
+        mContactsView.getContactsTask().execute() // AsyncTask provided by view
     }
 
-    private fun initializeContactsList() {
-        Log.d(TAG, "initializeContactsList()")
+    override fun initializeContactsList() {
+        System.out.println("initializeContactsList()")
 
         mContactsList.clear()
-        mContactsTask = ContactsTask((mAndroidThings as ContactsAndroidThings).mContext, mContactsList, mCallback)
-        mContactsTask.execute()
+        mContactsView.getContactsTask().execute()
 
-        Log.d(TAG, "contactsList.size = ${mContactsList.size}")
+        System.out.println("initializeContactsList()")
     }
 
     override fun getContactsList(): ArrayList<ContactsData> {
         return mContactsList
     }
 
-    private fun updateContactsViewAdapter() {
-        Log.d(TAG, "updateContactsViewAdapter()")
-        Log.d(TAG, "contactsList.size() = ${mContactsList.size}")
+    override fun updateContactsViewAdapter() {
+        System.out.println("updateContactsViewAdapter()")
+        System.out.println("contactsList.size() = ${mContactsList.size}")
 
-        (mContactsView as ContactsActivity).updateContactsViewAdapter()
+        mContactsView.updateContactsViewAdapter()
     }
 
     override fun notifyChange() {
-        (mContactsView as ContactsActivity).setIsNeedToUpdateContactsList(true)
+        mContactsView.setIsNeedToUpdateContactsList(true)
     }
 }
