@@ -1,5 +1,6 @@
 package com.example.hclee.lifeguard.database
 
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 
 /**
@@ -18,5 +19,25 @@ object DatabaseManager {
         mDb = openHelper.writableDatabase
 
         return mDb
+    }
+
+    fun getProfileImageUriString(phoneNumber: String): String {
+        val sql: String = "SELECT * FROM $mTableName WHERE phone_number = '$phoneNumber'"
+        val cursor: Cursor = rawQuery(sql, null)
+        var profileImageUriString: String = ""
+
+        if(cursor.count > 0) {
+            cursor.moveToNext() // Move cursor to first row
+
+            profileImageUriString = cursor.getString(1)
+        }
+
+        cursor.close()
+
+        return profileImageUriString
+    }
+
+    private fun rawQuery(sql: String, selectionArgs: Array<String>?): Cursor {
+        return mDb.rawQuery(sql, selectionArgs)
     }
 }
