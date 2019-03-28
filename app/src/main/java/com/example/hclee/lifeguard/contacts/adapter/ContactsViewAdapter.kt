@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.item.view.*
 
 class ContactsViewAdapter(private val mActivity: ContactsContract.View, private val mContactsList: List<ContactsData>, private val mGlideRequestManager: RequestManager): RecyclerView.Adapter<ContactsViewAdapter.ContactsViewHolder>() {
     private val TAG: String = ContactsViewAdapter::class.java.simpleName
+    private val KEY_INTENT_EXTRA: String = "phone_number"
     private val mSwipeListener: SwipeListenerImpl = SwipeListenerImpl()
     private val mViewHolderList: ArrayList<ContactsViewHolder>
 
@@ -60,7 +61,7 @@ class ContactsViewAdapter(private val mActivity: ContactsContract.View, private 
             itemView.tv_edit_profile.setOnClickListener {
                 Log.d(TAG, "tv_edit_profile click")
 
-                moveEditProfileActivity()
+                moveEditProfileActivity((phoneNumberTextView.text).toString())
             }
         }
 
@@ -112,11 +113,12 @@ class ContactsViewAdapter(private val mActivity: ContactsContract.View, private 
         (mActivity as ContactsActivity).switchToAnotherActivity(intent)
     }
 
-    private fun moveEditProfileActivity() {
+    private fun moveEditProfileActivity(phoneNumber: String) {
         val intent: Intent = Intent()
         val componentName: ComponentName = ComponentName("com.example.hclee.lifeguard", "com.example.hclee.lifeguard.editprofile.EditProfileActivity")
 
         intent.component = componentName
+        intent.putExtra(KEY_INTENT_EXTRA, phoneNumber)
 
         (mActivity as ContactsActivity).switchToAnotherActivity(intent)
     }
