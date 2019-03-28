@@ -1,6 +1,5 @@
 package com.example.hclee.lifeguard.contacts
 
-import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -20,14 +19,14 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
 
     override lateinit var mPresenter: ContactsContract.Presenter
 
-    private lateinit var mContext: Context
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private lateinit var mDividerItemDecoration: DividerItemDecoration
     private var mIsNeedToUpdateContactsList: Boolean = false
-    lateinit var mRecyclerView: RecyclerView
+    private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: ContactsViewAdapter
     private lateinit var mGlideRequestManager: RequestManager
+    private lateinit var mAndroidThings: ContactsAndroidThings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +38,6 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
     }
 
     private fun init() {
-        mContext = applicationContext
         mSwipeRefreshLayout = swipe_layout.apply {
             setOnRefreshListener{
                 Log.d(TAG, "onRefresh()")
@@ -49,7 +47,8 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
                 isRefreshing = false // After refresh, inform the view should not refresh anymore
             }
         }
-        mPresenter = ContactsPresenter(this, this)
+        mAndroidThings = ContactsAndroidThings(this)
+        mPresenter = ContactsPresenter(this, mAndroidThings)
         mLayoutManager = LinearLayoutManager(this).apply {
             orientation = LinearLayoutManager.VERTICAL
         }

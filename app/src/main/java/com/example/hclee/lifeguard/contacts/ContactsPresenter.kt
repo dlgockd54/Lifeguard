@@ -1,7 +1,7 @@
 package com.example.hclee.lifeguard.contacts
 
-import android.content.Context
 import android.util.Log
+import com.example.hclee.lifeguard.AndroidThings
 
 /**
  * Created by hclee on 2019-03-19.
@@ -11,7 +11,7 @@ interface ContactsLoadingFinishCallback {
     fun onContactsLoadingFinished()
 }
 
-class ContactsPresenter(private val mContext: Context, val mContactsView: ContactsContract.View): ContactsContract.Presenter {
+class ContactsPresenter(val mContactsView: ContactsContract.View, private val mAndroidThings: AndroidThings): ContactsContract.Presenter {
     private val TAG: String = ContactsPresenter::class.java.simpleName
     private val mContactsList: ArrayList<ContactsData>
     private val mContactsObserverManager: ContactsObserverManager
@@ -24,7 +24,7 @@ class ContactsPresenter(private val mContext: Context, val mContactsView: Contac
 
     init {
         mContactsList = ArrayList<ContactsData>()
-        mContactsObserverManager = ContactsObserverManager(mContext, this)
+        mContactsObserverManager = ContactsObserverManager((mAndroidThings as ContactsAndroidThings).mContext, this)
 
         initializeContactsList()
     }
@@ -33,7 +33,7 @@ class ContactsPresenter(private val mContext: Context, val mContactsView: Contac
         Log.d(TAG, "refreshContactsList()")
 
         mContactsList.clear() // Clear all data of the list
-        mContactsTask = ContactsTask(mContext, mContactsList, mCallback)
+        mContactsTask = ContactsTask((mAndroidThings as ContactsAndroidThings).mContext, mContactsList, mCallback)
         mContactsTask.execute()
     }
 
@@ -41,7 +41,7 @@ class ContactsPresenter(private val mContext: Context, val mContactsView: Contac
         Log.d(TAG, "initializeContactsList()")
 
         mContactsList.clear()
-        mContactsTask = ContactsTask(mContext, mContactsList, mCallback)
+        mContactsTask = ContactsTask((mAndroidThings as ContactsAndroidThings).mContext, mContactsList, mCallback)
         mContactsTask.execute()
 
         Log.d(TAG, "contactsList.size = ${mContactsList.size}")
