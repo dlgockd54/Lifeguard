@@ -1,26 +1,32 @@
 package com.example.hclee.lifeguard.editprofile
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
-import android.widget.Toast
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.hclee.lifeguard.AndroidThings
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.database.DatabaseManager
 import com.example.hclee.lifeguard.database.ProfileImageOpenHelper
+import com.example.hclee.lifeguard.gallery.GalleryActivity
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 
 class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
     private val TAG: String = EditProfileActivity::class.java.simpleName
+    private val PROFILE_REQUEST_CODE = 919
 
     override lateinit var mPresenter: EditProfileContract.Presenter
 
     lateinit var mProfileImageView: ImageView
+    lateinit var mChangeTextView: TextView
     private lateinit var mProfileImageOpenHelper: ProfileImageOpenHelper
     private lateinit var mAndroidThings: AndroidThings
     private lateinit var mProfileImageDrawable: Drawable
@@ -36,13 +42,8 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
     }
 
     private fun init() {
-        mProfileImageView = iv_edit_profile.apply {
-            setOnClickListener {
-                Log.d(TAG, "onClick()")
-
-                changeProfileImage()
-            }
-        }
+        mProfileImageView = iv_profile_image
+        mChangeTextView = tv_change_profile
         mProfileImageOpenHelper = ProfileImageOpenHelper(this, DatabaseManager.mDbName, null, 1)
         mGlideRequestManager = Glide.with(this)
         mAndroidThings = EditProfileAndroidThings(this, mProfileImageOpenHelper)
@@ -55,10 +56,48 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
             .into(mProfileImageView)
     }
 
+    fun onClick(view: View?) {
+        Log.d(TAG, "onClick()")
+
+        when(view?.id) {
+            (mProfileImageView.id) -> {
+                Log.d(TAG, "image")
+
+                // Show profile image big
+//                showProfileImage()
+            }
+            (mChangeTextView.id) -> {
+                Log.d(TAG, "text")
+
+                changeProfileImage()
+            }
+            else -> {
+                Log.d(TAG, "unknown view id")
+            }
+        }
+    }
+
     private fun changeProfileImage() {
         Log.d(TAG, "changeProfileImage()")
 
-        mPresenter.changeProfileImage()
+        val intent: Intent = Intent(this, GalleryActivity::class.java)
+
+        startActivityForResult(intent, PROFILE_REQUEST_CODE)
+        overridePendingTransition(R.anim.animation_slide_from_right, R.anim.animation_slide_to_left)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d(TAG, "onActivityResult()")
+
+        when(requestCode) {
+            PROFILE_REQUEST_CODE -> {
+                Log.d(TAG, "result: $resultCode")
+
+                if(resultCode == Activity.RESULT_OK) {
+
+                }
+            }
+        }
     }
 
     override fun onBackPressed() {

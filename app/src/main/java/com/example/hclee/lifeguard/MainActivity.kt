@@ -12,7 +12,7 @@ import com.example.hclee.lifeguard.contacts.ContactsActivity
 class MainActivity : AppCompatActivity() {
     private val TAG: String = MainActivity::class.java.simpleName
     private val permissionList: Array<String> = arrayOf(Manifest.permission.READ_CONTACTS,
-        Manifest.permission.CALL_PHONE)
+        Manifest.permission.CALL_PHONE, Manifest.permission.READ_EXTERNAL_STORAGE)
     private val PERMISSION_REQUEST_CODE: Int = 80
 
     override fun onCreate(savedInstanceState: Bundle?) {
