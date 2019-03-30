@@ -16,6 +16,10 @@ import com.example.hclee.lifeguard.database.ProfileImageOpenHelper
  * Created by hclee on 2019-03-21.
  */
 
+/**
+ * Pull contacts using ContentProvider.
+ * Update RecyclerView of ContactsActivity.
+ */
 class ContactsTask(private val mContext: Context, private val mContactsList: ArrayList<ContactsData>, private val callback: ContactsLoadingFinishCallback)
     : AsyncTask<Void, Int, Unit>() {
     private val TAG: String = ContactsTask::class.java.simpleName
