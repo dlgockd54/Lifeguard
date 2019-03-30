@@ -1,6 +1,5 @@
 package com.example.hclee.lifeguard.gallery
 
-import com.example.hclee.lifeguard.AndroidThings
 import com.example.hclee.lifeguard.BasePresenter
 import com.example.hclee.lifeguard.BaseView
 
@@ -10,13 +9,13 @@ import com.example.hclee.lifeguard.BaseView
 
 interface GalleryContract {
     interface View: BaseView<Presenter> {
-
+        fun updateAdapter(picture: Picture)
+        fun notifyPictureUpdate()
     }
 
     interface Presenter: BasePresenter {
         fun getPictureList(): List<Picture>
-        fun pullPictureFromStorage(androidThings: AndroidThings)
-        fun addPictureToList(picture: Picture)
+        fun pullPictureFromStorage(galleryTask: GalleryTask)
         fun updateAdapter(picture: Picture)
     }
 }

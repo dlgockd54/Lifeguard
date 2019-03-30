@@ -11,6 +11,9 @@ import android.util.Log
  * Created by hclee on 2019-03-29.
  */
 
+/**
+ * Unlike ContactsTask, GalleryTask updates recycler view every time the task pull a picture.
+ */
 class GalleryTask(private val mContext: Context, private val mListener: PictureLoadingListener): AsyncTask<Void, Picture, Unit>() {
     private val TAG: String = GalleryTask::class.java.simpleName
 
@@ -20,7 +23,7 @@ class GalleryTask(private val mContext: Context, private val mListener: PictureL
         Log.d(TAG, "pictureCursor.count: ${pictureCursor.count}")
 
         while(pictureCursor.moveToNext()) {
-            val picture: Picture = Picture(pictureCursor.getString(0), false)
+            val picture: Picture = Picture(pictureCursor.getString(0),  pictureCursor.getString(1), false)
 
             publishProgress(picture)
         }
@@ -28,7 +31,7 @@ class GalleryTask(private val mContext: Context, private val mListener: PictureL
 
     private fun getPictureCursor(): Cursor {
         val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val projection: Array<String> = arrayOf(MediaStore.MediaColumns.DATA)
+        val projection: Array<String> = arrayOf(MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.DISPLAY_NAME)
         val selection: String? = null
         val selectionArgs: Array<String>? = null
         val sortOrder: String = "${MediaStore.MediaColumns.DATE_ADDED} COLLATE LOCALIZED DESC" // SQL ORDER BY clause
