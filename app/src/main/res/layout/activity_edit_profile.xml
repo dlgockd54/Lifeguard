@@ -7,6 +7,10 @@
         android:layout_height="match_parent"
         tools:context=".editprofile.EditProfileActivity">
 
+    <include
+            android:id="@+id/edit_profile_toolbar"
+            layout="@layout/toolbar"/>
+
     <LinearLayout
             android:layout_width="100dp"
             android:layout_height="match_parent"

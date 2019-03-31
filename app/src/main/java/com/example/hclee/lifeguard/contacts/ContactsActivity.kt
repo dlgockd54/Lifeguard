@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -28,6 +29,7 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
     private lateinit var mAdapter: ContactsViewAdapter
     private lateinit var mGlideRequestManager: RequestManager
     private lateinit var mAndroidThings: ContactsAndroidThings
+    private lateinit var mToolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,10 +39,13 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
 
         init()
 
+        setSupportActionBar(mToolbar)
+
         mPresenter.initializeContactsList()
     }
 
     private fun init() {
+        mToolbar = (contacts_toolbar as Toolbar)
         mSwipeRefreshLayout = swipe_layout.apply {
             setOnRefreshListener{
                 Log.d(TAG, "onRefresh()")

@@ -1,13 +1,17 @@
 package com.example.hclee.lifeguard.gallery
 
 import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -28,6 +32,7 @@ class GalleryActivity : AppCompatActivity(), GalleryContract.View {
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private lateinit var mAndroidThings: GalleryAndroidThings
     private lateinit var mSharedPreferences: SharedPreferences
+    lateinit var mToolbar: Toolbar
     private val mListener: PictureLoadingListener = object: PictureLoadingListener {
         override fun onAllPictureLoadingFinish() {
             Toast.makeText(this@GalleryActivity, "All picture loaded", Toast.LENGTH_SHORT).show()
@@ -46,13 +51,12 @@ class GalleryActivity : AppCompatActivity(), GalleryContract.View {
         setContentView(R.layout.activity_gallery)
 
         init()
-
+        setSupportActionBar(mToolbar)
         pullPictureFromStorage()
-
-        setResult(Activity.RESULT_OK)
     }
 
     private fun init() {
+        mToolbar = (gallery_toolbar as Toolbar)
         mSharedPreferences = getSharedPreferences("picture_updated_preferences", MODE_PRIVATE)
         mSwipeRefreshLayout = swipe_layout_gallery.apply {
             setOnRefreshListener {
@@ -113,6 +117,39 @@ class GalleryActivity : AppCompatActivity(), GalleryContract.View {
 
         sharedPreferencesEditor.putBoolean("picture_updated", preferences)
         sharedPreferencesEditor.apply()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        Log.d(TAG, "onCreateOptionsMenu()")
+
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.menu_ok -> {
+                mAdapter.getSelectedPicture().let {
+                    makePictureProfileImage(it!!)
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun makePictureProfileImage(picture: Picture) {
+        Log.d(TAG, "makePictureProfileImage()")
+        Log.d(TAG, "selected: ${picture.mPicturePath}")
+
+        val resultIntent: Intent = Intent().apply {
+            putExtra("picture_path", picture.mPicturePath)
+        }
+
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+        overridePendingTransition(R.anim.animation_slide_from_left, R.anim.animation_slide_to_right)
     }
 
     override fun onStart() {
