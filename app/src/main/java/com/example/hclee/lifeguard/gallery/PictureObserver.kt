@@ -4,6 +4,7 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.util.Log
+import com.example.hclee.lifeguard.gallery.listener.PictureUpdateListener
 
 /**
  * Created by hclee on 2019-03-29.

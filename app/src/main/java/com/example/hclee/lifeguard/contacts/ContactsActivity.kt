@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.contacts.adapter.ContactsViewAdapter
+import com.example.hclee.lifeguard.contacts.listener.ContactsLoadingFinishListener
 import kotlinx.android.synthetic.main.activity_contacts.*
 
 class ContactsActivity : AppCompatActivity(), ContactsContract.View {
@@ -64,7 +65,7 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
     }
 
     override fun getContactsTask(): ContactsTask {
-        return ContactsTask(this, mPresenter.getContactsList(), object: ContactsLoadingFinishCallback {
+        return ContactsTask(this, mPresenter.getContactsList(), object: ContactsLoadingFinishListener {
             override fun onContactsLoadingFinished() {
                 mPresenter.updateContactsViewAdapter()
             }

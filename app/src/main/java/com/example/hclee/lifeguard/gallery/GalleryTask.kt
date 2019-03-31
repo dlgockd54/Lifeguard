@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.provider.MediaStore
 import android.util.Log
+import com.example.hclee.lifeguard.gallery.listener.PictureLoadingListener
 
 /**
  * Created by hclee on 2019-03-29.

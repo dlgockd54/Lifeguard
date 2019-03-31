@@ -7,11 +7,6 @@ import java.util.*
  * Created by hclee on 2019-03-28.
  */
 
-interface PictureLoadingListener {
-    fun onAllPictureLoadingFinish()
-    fun onPictureLoading(picture: Picture)
-}
-
 class GalleryPresenter(private val mActivity: GalleryContract.View, private val mAndroidThings: GalleryAndroidThings): GalleryContract.Presenter {
     private val TAG: String = GalleryPresenter::class.java.simpleName
     private var mPictureList: List<Picture> = LinkedList<Picture>()

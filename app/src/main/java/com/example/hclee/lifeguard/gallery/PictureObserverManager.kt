@@ -4,14 +4,11 @@ import android.content.Context
 import android.net.Uri
 import android.os.Handler
 import android.provider.MediaStore
+import com.example.hclee.lifeguard.gallery.listener.PictureUpdateListener
 
 /**
  * Created by hclee on 2019-03-29.
  */
-
-interface PictureUpdateListener {
-    fun onPictureUpdate()
-}
 
 object PictureObserverManager {
     private val TAG: String = PictureObserverManager::class.java.simpleName
@@ -24,7 +21,8 @@ object PictureObserverManager {
         val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
         mPresenter = presenter
-        mPictureObserver = PictureObserver(handler, object: PictureUpdateListener {
+        mPictureObserver = PictureObserver(handler, object:
+            PictureUpdateListener {
             override fun onPictureUpdate() {
                 mPresenter.resetList() // Create new picture list
                 mPresenter.notifyPictureUpdate() // Notify to update view

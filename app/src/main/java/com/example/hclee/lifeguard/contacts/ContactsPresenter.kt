@@ -6,10 +6,6 @@ import com.example.hclee.lifeguard.AndroidThings
  * Created by hclee on 2019-03-19.
  */
 
-interface ContactsLoadingFinishCallback {
-    fun onContactsLoadingFinished()
-}
-
 class ContactsPresenter(val mContactsView: ContactsContract.View, private val mAndroidThings: AndroidThings): ContactsContract.Presenter {
     private val TAG: String = ContactsPresenter::class.java.simpleName
     private val mContactsList: ArrayList<ContactsData>

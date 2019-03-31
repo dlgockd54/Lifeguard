@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.gallery.adapter.GalleryAdapter
+import com.example.hclee.lifeguard.gallery.listener.PictureLoadingListener
 import kotlinx.android.synthetic.main.activity_gallery.*
 
 class GalleryActivity : AppCompatActivity(), GalleryContract.View {

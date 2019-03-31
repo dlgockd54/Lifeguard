@@ -9,6 +9,7 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import com.example.hclee.lifeguard.R
+import com.example.hclee.lifeguard.contacts.listener.ContactsLoadingFinishListener
 import com.example.hclee.lifeguard.database.DatabaseManager
 import com.example.hclee.lifeguard.database.ProfileImageOpenHelper
 
@@ -20,7 +21,7 @@ import com.example.hclee.lifeguard.database.ProfileImageOpenHelper
  * Pull contacts using ContentProvider.
  * Update RecyclerView of ContactsActivity.
  */
-class ContactsTask(private val mContext: Context, private val mContactsList: ArrayList<ContactsData>, private val callback: ContactsLoadingFinishCallback)
+class ContactsTask(private val mContext: Context, private val mContactsList: ArrayList<ContactsData>, private val callback: ContactsLoadingFinishListener)
     : AsyncTask<Void, Int, Unit>() {
     private val TAG: String = ContactsTask::class.java.simpleName
     private var cursorCount: Int = 0
