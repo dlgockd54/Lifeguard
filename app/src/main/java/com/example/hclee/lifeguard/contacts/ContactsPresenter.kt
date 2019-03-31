@@ -13,7 +13,9 @@ class ContactsPresenter(val mContactsView: ContactsContract.View, private val mA
 
     init {
         mContactsList = ArrayList<ContactsData>()
-        mContactsObserverManager = ContactsObserverManager((mAndroidThings as ContactsAndroidThings).mContext, this)
+        mContactsObserverManager = ContactsObserverManager.apply {
+            registerObserver((mAndroidThings as ContactsAndroidThings).mContext, this@ContactsPresenter)
+        }
     }
 
     override fun refreshContactsList() {

@@ -8,18 +8,20 @@ import com.example.hclee.lifeguard.contacts.listener.ContactsUpdateListener
  * Created by hclee on 2019-03-24.
  */
 
-class ContactsObserverManager(private val mContext: Context, private val mPresenter: ContactsPresenter) {
-    private val mContactsObserver: ContactsObserver
+object ContactsObserverManager {
+    private lateinit var mContactsObserver: ContactsObserver
+    private lateinit var mPresenter: ContactsPresenter
 
-    init {
+    fun registerObserver(context: Context, presenter: ContactsPresenter) {
         val uri: Uri = android.provider.ContactsContract.CommonDataKinds.Phone.CONTENT_URI
 
+        mPresenter = presenter
         mContactsObserver = ContactsObserver(null, object: ContactsUpdateListener {
             override fun onContactsUpdate() {
                 mPresenter.notifyChange()
             }
         })
 
-        mContext.contentResolver.registerContentObserver(uri, true, mContactsObserver)
+        context.contentResolver.registerContentObserver(uri, true, mContactsObserver)
     }
 }
