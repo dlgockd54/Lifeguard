@@ -3,6 +3,8 @@ package com.example.hclee.lifeguard.contacts.adapter
 import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
+import android.os.Handler
+import android.os.Message
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,6 +29,23 @@ class ContactsViewAdapter(private val mActivity: ContactsContract.View, private 
     private val KEY_INTENT_EXTRA: String = "phone_number"
     private val mSwipeListener: SwipeListenerImpl = SwipeListenerImpl()
     private val mViewHolderList: ArrayList<ContactsViewHolder>
+
+    companion object {
+        private val MSG_CLOSE_ITEM: Int = 345
+
+        /**
+         * Close all of items in this adapter, after startActivity()
+         */
+        class CloseItemHandler(private val contactsViewAdapter: ContactsViewAdapter) : Handler() {
+            override fun handleMessage(msg: Message?) {
+                when(msg?.what) {
+                    MSG_CLOSE_ITEM -> {
+                        contactsViewAdapter.closeAllItem()
+                    }
+                }
+            }
+        }
+    }
 
     init {
         mViewHolderList = ArrayList<ContactsViewHolder>()
@@ -116,11 +135,13 @@ class ContactsViewAdapter(private val mActivity: ContactsContract.View, private 
     private fun moveEditProfileActivity(phoneNumber: String) {
         val intent: Intent = Intent()
         val componentName: ComponentName = ComponentName("com.example.hclee.lifeguard", "com.example.hclee.lifeguard.editprofile.EditProfileActivity")
+        val message: Message = Message.obtain(null, MSG_CLOSE_ITEM)
 
         intent.component = componentName
         intent.putExtra(KEY_INTENT_EXTRA, phoneNumber)
 
         (mActivity as ContactsActivity).switchToAnotherActivity(intent)
+        CloseItemHandler(this).sendMessageDelayed(message, 1000)
     }
 
     class ContactsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
