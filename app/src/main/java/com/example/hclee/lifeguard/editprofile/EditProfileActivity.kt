@@ -140,6 +140,6 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
         super.onBackPressed()
 
         finish()
-        overridePendingTransition(R.anim.animation_slide_to_right, R.anim.animation_slide_from_left)
+        overridePendingTransition(R.anim.animation_slide_from_left, R.anim.animation_slide_to_right)
     }
 }

@@ -152,6 +152,12 @@ class GalleryActivity : AppCompatActivity(), GalleryContract.View {
         }
 
         setResult(Activity.RESULT_OK, resultIntent)
+        onBackPressed()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
         finish()
         overridePendingTransition(R.anim.animation_slide_from_left, R.anim.animation_slide_to_right)
     }
