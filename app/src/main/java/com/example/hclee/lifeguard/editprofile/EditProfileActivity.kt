@@ -1,6 +1,7 @@
 package com.example.hclee.lifeguard.editprofile
 
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -17,6 +18,7 @@ import com.example.hclee.lifeguard.AndroidThings
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.database.DatabaseManager
 import com.example.hclee.lifeguard.database.ProfileImageOpenHelper
+import com.example.hclee.lifeguard.expandedprofile.ExpandedProfileActivity
 import com.example.hclee.lifeguard.gallery.GalleryActivity
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 
@@ -70,7 +72,7 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
                 Log.d(TAG, "image")
 
                 // Show profile image big
-//                showProfileImage()
+                showProfileImage()
             }
             (mChangeTextView.id) -> {
                 Log.d(TAG, "text")
@@ -81,6 +83,17 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
                 Log.d(TAG, "unknown view id")
             }
         }
+    }
+
+    private fun showProfileImage() {
+        val componentName: ComponentName = ComponentName(this, ExpandedProfileActivity::class.java)
+        val intent: Intent = Intent().apply {
+            component = componentName
+            putExtra("phone_number", mPhoneNumber)
+        }
+
+        startActivity(intent)
+        overridePendingTransition(R.anim.animation_slide_from_right, R.anim.animation_slide_to_left)
     }
 
     private fun selectProfileImage() {
