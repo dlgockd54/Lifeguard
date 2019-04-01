@@ -3,6 +3,7 @@ package com.example.hclee.lifeguard.gallery
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
@@ -19,6 +20,7 @@ import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.gallery.adapter.GalleryAdapter
 import com.example.hclee.lifeguard.gallery.listener.PictureLoadingListener
 import kotlinx.android.synthetic.main.activity_gallery.*
+import java.io.File
 
 class GalleryActivity : AppCompatActivity(), GalleryContract.View {
     private val TAG: String = GalleryActivity::class.java.simpleName
@@ -143,8 +145,10 @@ class GalleryActivity : AppCompatActivity(), GalleryContract.View {
         Log.d(TAG, "makePictureProfileImage()")
         Log.d(TAG, "selected: ${picture.mPicturePath}")
 
+        val picturePath: String = picture.mPicturePath
+        val pictureUri: Uri = Uri.fromFile(File(picturePath))
         val resultIntent: Intent = Intent().apply {
-            putExtra("picture_path", picture.mPicturePath)
+            putExtra("picture_uri", pictureUri.toString())
         }
 
         setResult(Activity.RESULT_OK, resultIntent)

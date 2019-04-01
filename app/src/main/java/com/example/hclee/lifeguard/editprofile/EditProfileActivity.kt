@@ -33,6 +33,7 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
     private lateinit var mProfileImageDrawable: Drawable
     private lateinit var mGlideRequestManager: RequestManager
     private lateinit var mToolbar: Toolbar
+    private lateinit var mPhoneNumber: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +53,9 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
         mGlideRequestManager = Glide.with(this)
         mAndroidThings = EditProfileAndroidThings(this, mProfileImageOpenHelper)
         mPresenter = EditProfilePresenter(this, mAndroidThings)
+        mPhoneNumber = intent.getStringExtra("phone_number")
         mProfileImageDrawable = Drawable.createFromStream(contentResolver.openInputStream(Uri.parse(
-            mPresenter.getProfileImageUriString(intent.getStringExtra("phone_number")))), intent.getStringExtra("phone_number"))
+            mPresenter.getProfileImageUriString(mPhoneNumber))), mPhoneNumber)
         mGlideRequestManager
             .load(mProfileImageDrawable)
             .circleCrop()
@@ -73,7 +75,7 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
             (mChangeTextView.id) -> {
                 Log.d(TAG, "text")
 
-                changeProfileImage()
+                selectProfileImage()
             }
             else -> {
                 Log.d(TAG, "unknown view id")
@@ -81,7 +83,7 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
         }
     }
 
-    private fun changeProfileImage() {
+    private fun selectProfileImage() {
         Log.d(TAG, "changeProfileImage()")
 
         val intent: Intent = Intent(this, GalleryActivity::class.java)
@@ -95,13 +97,30 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
 
         when(requestCode) {
             PROFILE_REQUEST_CODE -> {
-                Log.d(TAG, "result: $resultCode")
+                Log.d(TAG, "resultCode: $resultCode")
 
                 if(resultCode == Activity.RESULT_OK) {
+                    val resultIntent: Intent? = data
+                    val profileUri: Uri? = Uri.parse(resultIntent?.getStringExtra("picture_uri"))
 
+                    profileUri.let {
+                        changeProfileImage(profileUri!!)
+                    }
                 }
             }
         }
+    }
+
+    private fun changeProfileImage(uri: Uri) {
+        Log.d(TAG, uri.toString())
+
+        mPresenter.changeProfileImage(mPhoneNumber, uri)
+        mProfileImageDrawable = Drawable.createFromStream(contentResolver.openInputStream(Uri.parse(
+            mPresenter.getProfileImageUriString(mPhoneNumber))), mPhoneNumber)
+        mGlideRequestManager
+            .load(mProfileImageDrawable)
+            .circleCrop()
+            .into(mProfileImageView)
     }
 
     override fun onBackPressed() {

@@ -2,6 +2,7 @@ package com.example.hclee.lifeguard.database
 
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.net.Uri
 
 /**
  * Created by hclee on 2019-03-27.
@@ -35,6 +36,12 @@ object DatabaseManager {
         cursor.close()
 
         return profileImageUriString
+    }
+
+    fun setProfileImageUriString(phoneNumber: String, uri: Uri) {
+        val sql: String = "UPDATE $mTableName SET profile_image_uri = '${uri.toString()}' WHERE phone_number = '$phoneNumber'"
+
+        mDb.execSQL(sql)
     }
 
     private fun rawQuery(sql: String, selectionArgs: Array<String>?): Cursor {

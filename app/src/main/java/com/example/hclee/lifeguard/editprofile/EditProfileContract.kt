@@ -1,5 +1,6 @@
 package com.example.hclee.lifeguard.editprofile
 
+import android.net.Uri
 import com.example.hclee.lifeguard.BasePresenter
 import com.example.hclee.lifeguard.BaseView
 
@@ -13,7 +14,7 @@ interface EditProfileContract {
     }
 
     interface Presenter: BasePresenter {
-        fun changeProfileImage()
+        fun changeProfileImage(phoneNumber: String, uri: Uri)
         fun getProfileImageUriString(phoneNumber: String): String
     }
 }
