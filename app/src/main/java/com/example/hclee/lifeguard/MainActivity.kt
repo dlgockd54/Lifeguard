@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         startActivity(intent)
+        finish()
     }
 
     override fun onStart() {
