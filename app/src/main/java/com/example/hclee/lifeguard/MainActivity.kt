@@ -14,7 +14,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     private val TAG: String = MainActivity::class.java.simpleName
     private val permissionList: Array<String> = arrayOf(Manifest.permission.READ_CONTACTS,
-        Manifest.permission.CALL_PHONE, Manifest.permission.READ_EXTERNAL_STORAGE)
+        Manifest.permission.CALL_PHONE,
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.SEND_SMS,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.READ_PHONE_STATE)
     private val PERMISSION_REQUEST_CODE: Int = 80
     private lateinit var mToolbar: Toolbar
 

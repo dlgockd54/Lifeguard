@@ -1,6 +1,7 @@
 package com.example.hclee.lifeguard.contacts.adapter
 
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Handler
@@ -15,9 +16,7 @@ import android.widget.TextView
 import com.bumptech.glide.RequestManager
 import com.daimajia.swipe.SwipeLayout
 import com.example.hclee.lifeguard.R
-import com.example.hclee.lifeguard.contacts.ContactsActivity
-import com.example.hclee.lifeguard.contacts.ContactsContract
-import com.example.hclee.lifeguard.contacts.ContactsData
+import com.example.hclee.lifeguard.contacts.*
 import kotlinx.android.synthetic.main.item.view.*
 
 /**
@@ -70,6 +69,7 @@ class ContactsViewAdapter(private val mActivity: ContactsContract.View, private 
 
                         val phoneNumber: String = (phoneNumberTextView.text).toString()
 
+                        SMSSendManager.sendSMS(mActivity as Context, phoneNumber)
                         callClickedPerson(phoneNumber)
 
                         return true
