@@ -1,5 +1,6 @@
 package com.example.hclee.lifeguard.expandedprofile
 
+import android.net.Uri
 import com.example.hclee.lifeguard.BasePresenter
 import com.example.hclee.lifeguard.BaseView
 
@@ -13,6 +14,6 @@ interface ExpandedProfileContract {
     }
 
     interface Presenter: BasePresenter {
-        fun getProfileImageUriString(phoneNumber: String): String
+        fun getProfileImageUri(phoneNumber: String): Uri
     }
 }

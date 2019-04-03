@@ -22,7 +22,7 @@ object DatabaseManager {
         return mDb
     }
 
-    fun getProfileImageUriString(phoneNumber: String): String {
+    fun getProfileImageUri(phoneNumber: String): Uri {
         val sql: String = "SELECT * FROM $mTableName WHERE phone_number = '$phoneNumber'"
         val cursor: Cursor = rawQuery(sql, null)
         var profileImageUriString: String = ""
@@ -35,10 +35,10 @@ object DatabaseManager {
 
         cursor.close()
 
-        return profileImageUriString
+        return Uri.parse(profileImageUriString)
     }
 
-    fun setProfileImageUriString(phoneNumber: String, uri: Uri) {
+    fun setProfileImageUri(phoneNumber: String, uri: Uri) {
         val sql: String = "UPDATE $mTableName SET profile_image_uri = '${uri.toString()}' WHERE phone_number = '$phoneNumber'"
 
         mDb.execSQL(sql)

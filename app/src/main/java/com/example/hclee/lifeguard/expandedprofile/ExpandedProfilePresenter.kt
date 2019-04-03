@@ -1,5 +1,6 @@
 package com.example.hclee.lifeguard.expandedprofile
 
+import android.net.Uri
 import com.example.hclee.lifeguard.database.DatabaseManager
 
 /**
@@ -9,7 +10,7 @@ import com.example.hclee.lifeguard.database.DatabaseManager
 class ExpandedProfilePresenter(private val mActivity: ExpandedProfileContract.View)
     : ExpandedProfileContract.Presenter {
 
-    override fun getProfileImageUriString(phoneNumber: String): String {
-        return DatabaseManager.getProfileImageUriString(phoneNumber)
+    override fun getProfileImageUri(phoneNumber: String): Uri {
+        return DatabaseManager.getProfileImageUri(phoneNumber)
     }
 }

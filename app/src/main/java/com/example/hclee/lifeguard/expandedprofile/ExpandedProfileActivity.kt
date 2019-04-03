@@ -43,7 +43,7 @@ class ExpandedProfileActivity : AppCompatActivity(), ExpandedProfileContract.Vie
                 onBackPressed()
             }
         }
-        mProfileImageUri = Uri.parse(mPresenter.getProfileImageUriString(mPhoneNumber))
+        mProfileImageUri = mPresenter.getProfileImageUri(mPhoneNumber)
         mGlideRequestManager
             .load(mProfileImageUri)
             .into(mExpandedProfileImageView)

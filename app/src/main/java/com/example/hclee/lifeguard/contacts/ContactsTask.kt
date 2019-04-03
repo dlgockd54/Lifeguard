@@ -51,7 +51,7 @@ class ContactsTask(private val mContext: Context, private val mContactsList: Arr
         val cursor: Cursor = getProfileImageCursor(DatabaseManager.getDatabase(mProfileImageOpenHelper), "119")
 
         if(cursor.count < 1) {
-            DatabaseManager.setProfileImageUriString("119", uri)
+            DatabaseManager.setProfileImageUri("119", uri)
         }
         else {
             cursor.moveToFirst()
