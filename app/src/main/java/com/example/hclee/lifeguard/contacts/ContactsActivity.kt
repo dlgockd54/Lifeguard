@@ -14,6 +14,8 @@ import com.bumptech.glide.RequestManager
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.contacts.adapter.ContactsViewAdapter
 import com.example.hclee.lifeguard.contacts.listener.ContactsLoadingFinishListener
+import com.example.hclee.lifeguard.database.DatabaseManager
+import com.example.hclee.lifeguard.editprofile.listener.EditProfileObserverListener
 import kotlinx.android.synthetic.main.activity_contacts.*
 
 class ContactsActivity : AppCompatActivity(), ContactsContract.View {
@@ -30,6 +32,11 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
     private lateinit var mGlideRequestManager: RequestManager
     private lateinit var mAndroidThings: ContactsAndroidThings
     private lateinit var mToolbar: Toolbar
+    private val mEditProfileObserverListener: EditProfileObserverListener = object: EditProfileObserverListener {
+        override fun onChange() {
+            setIsNeedToUpdateContactsList(true)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +45,8 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
         Log.d(TAG, "onCreate()")
 
         init()
-
         setSupportActionBar(mToolbar)
+        DatabaseManager.registerObserverListener(mEditProfileObserverListener) // Register listener, watches changes on database
 
         mPresenter.initializeContactsList()
     }
@@ -125,5 +132,7 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
         super.onDestroy()
 
         Log.d(TAG, "onDestroy()")
+
+        DatabaseManager.unregisterObserverListener(mEditProfileObserverListener)
     }
 }

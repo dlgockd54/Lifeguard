@@ -97,7 +97,7 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
     }
 
     private fun selectProfileImage() {
-        Log.d(TAG, "changeProfileImage()")
+        Log.d(TAG, "selectProfileImage()")
 
         val intent: Intent = Intent(this, GalleryActivity::class.java)
 
