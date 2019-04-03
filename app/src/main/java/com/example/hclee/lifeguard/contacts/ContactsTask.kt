@@ -45,6 +45,22 @@ class ContactsTask(private val mContext: Context, private val mContactsList: Arr
         super.onPreExecute()
     }
 
+    private fun addEmergencyService() {
+        var uri: Uri = Uri.parse("android.resource://${mContext.packageName}/${R.raw.emergency_119}")
+        val sql: String = "INSERT INTO ${DatabaseManager.mTableName} VALUES ('119', '${uri.toString()}')"
+        val cursor: Cursor = getProfileImageCursor(DatabaseManager.getDatabase(mProfileImageOpenHelper), "119")
+
+        if(cursor.count < 1) {
+            DatabaseManager.setProfileImageUriString("119", uri)
+        }
+        else {
+            cursor.moveToFirst()
+            uri = Uri.parse(cursor.getString(1))
+        }
+
+        mContactsList.add(ContactsData(uri, "119 안전신고센터", "119"))
+    }
+
     /**
      * Only doInBackground() method runs on worker thread, others on main thread.
      */
@@ -52,6 +68,8 @@ class ContactsTask(private val mContext: Context, private val mContactsList: Arr
         val nameAndPhoneNumberCursor: Cursor = getNameAndPhoneNumberCursor()
         val db: SQLiteDatabase = mDatabaseManager.getDatabase(mProfileImageOpenHelper)
         var progress: Int = 1
+
+        addEmergencyService()
 
         cursorCount = nameAndPhoneNumberCursor.count
         Log.d(TAG, "cursor.count: ${cursorCount}")
@@ -62,7 +80,7 @@ class ContactsTask(private val mContext: Context, private val mContactsList: Arr
             val phoneNumber: String = nameAndPhoneNumberCursor.getString(1)
             val profileImageUriCursor: Cursor = getProfileImageCursor(db, phoneNumber)
 
-            if(profileImageUriCursor.count < 1) {
+            if(profileImageUriCursor.count < 1) { // Set default profile image
                 Log.d(TAG, "profile image null!")
 
                 // Default profile image
