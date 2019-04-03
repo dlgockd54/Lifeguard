@@ -39,6 +39,7 @@ class ContactsTask(private val mContext: Context, private val mContactsList: Arr
         }
 
         mProfileImageOpenHelper = ProfileImageOpenHelper(mContext, DatabaseManager.mDbName, null, 1)
+        DatabaseManager.getDatabase(mProfileImageOpenHelper)
 
         Log.d(TAG, "isShowing(): ${mDialog.isShowing}")
 
@@ -47,11 +48,10 @@ class ContactsTask(private val mContext: Context, private val mContactsList: Arr
 
     private fun addEmergencyService() {
         var uri: Uri = Uri.parse("android.resource://${mContext.packageName}/${R.raw.emergency_119}")
-        val sql: String = "INSERT INTO ${DatabaseManager.mTableName} VALUES ('119', '${uri.toString()}')"
-        val cursor: Cursor = getProfileImageCursor(DatabaseManager.getDatabase(mProfileImageOpenHelper), "119")
+        val cursor: Cursor = DatabaseManager.getProfileImageCursor("119")
 
         if(cursor.count < 1) {
-            DatabaseManager.setProfileImageUri("119", uri)
+            DatabaseManager.insertProfileImageUri("119", uri)
         }
         else {
             cursor.moveToFirst()
@@ -65,8 +65,9 @@ class ContactsTask(private val mContext: Context, private val mContactsList: Arr
      * Only doInBackground() method runs on worker thread, others on main thread.
      */
     override fun doInBackground(vararg params: Void?) {
+//        val nameAndPhoneNumberCursor: Cursor = getNameAndPhoneNumberCursor()
+//        val db: SQLiteDatabase = mDatabaseManager.getDatabase(mProfileImageOpenHelper)
         val nameAndPhoneNumberCursor: Cursor = getNameAndPhoneNumberCursor()
-        val db: SQLiteDatabase = mDatabaseManager.getDatabase(mProfileImageOpenHelper)
         var progress: Int = 1
 
         addEmergencyService()
@@ -78,14 +79,14 @@ class ContactsTask(private val mContext: Context, private val mContactsList: Arr
             var profileImageUri: Uri
             val name: String = nameAndPhoneNumberCursor.getString(0)
             val phoneNumber: String = nameAndPhoneNumberCursor.getString(1)
-            val profileImageUriCursor: Cursor = getProfileImageCursor(db, phoneNumber)
+            val profileImageUriCursor: Cursor = DatabaseManager.getProfileImageCursor(phoneNumber)
 
             if(profileImageUriCursor.count < 1) { // Set default profile image
                 Log.d(TAG, "profile image null!")
 
-                // Default profile image
-                db.execSQL("INSERT INTO ${DatabaseManager.mTableName} VALUES ('$phoneNumber', '${getDefaultProfileImageUri()}')")
-                profileImageUri = Uri.parse(getDefaultProfileImageUri())
+                // Insert default profile image
+                DatabaseManager.insertProfileImageUri(phoneNumber, getDefaultProfileImageUri())
+                profileImageUri = getDefaultProfileImageUri()
             }
             else {
                 profileImageUriCursor.moveToNext()
@@ -105,6 +106,10 @@ class ContactsTask(private val mContext: Context, private val mContactsList: Arr
         nameAndPhoneNumberCursor.close()
     }
 
+    /**
+     * Because of this function does not use SQLite but ContentResolver,
+     * better exist in this class not DatabaseManager.
+     */
     private fun getNameAndPhoneNumberCursor(): Cursor {
         val uri: Uri = android.provider.ContactsContract.CommonDataKinds.Phone.CONTENT_URI
         val projection: Array<String> = arrayOf(
@@ -122,18 +127,12 @@ class ContactsTask(private val mContext: Context, private val mContactsList: Arr
         return cursor
     }
 
-    private fun getProfileImageCursor(db: SQLiteDatabase, phoneNumber: String): Cursor {
-        val cursor: Cursor = db.rawQuery("SELECT * FROM ${DatabaseManager.mTableName} WHERE phone_number = '$phoneNumber'", null)
+    private fun getDefaultProfileImageUri(): Uri {
+        val uri: Uri = Uri.parse("android.resource://${mContext.packageName}/${R.raw.default_profile}")
 
-        return cursor
-    }
+        Log.d(TAG, "uriString: ${uri.toString()}")
 
-    private fun getDefaultProfileImageUri(): String {
-        val uriString: String = Uri.parse("android.resource://${mContext.packageName}/${R.raw.default_profile}").toString()
-
-        Log.d(TAG, "uriString: $uriString")
-
-        return uriString
+        return uri
     }
 
     // Update contacts loading progress as a dialog using progress bar

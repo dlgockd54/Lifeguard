@@ -15,7 +15,7 @@ class EditProfilePresenter(val mEditProfileView: EditProfileContract.View, priva
     override fun changeProfileImage(phoneNumber: String, uri: Uri) {
         Log.d(TAG, "changeProfileImage()")
 
-        DatabaseManager.setProfileImageUri(phoneNumber, uri)
+        DatabaseManager.updateProfileImageUri(phoneNumber, uri)
     }
 
     override fun getProfileImageUriString(phoneNumber: String): String {
