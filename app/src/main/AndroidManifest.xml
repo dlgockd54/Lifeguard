@@ -41,6 +41,8 @@
         </activity>
         <activity android:name=".expandedprofile.ExpandedProfileActivity">
         </activity>
+        <activity android:name=".userprofile.UserProfileActivity">
+        </activity>
     </application>
 
 </manifest>
