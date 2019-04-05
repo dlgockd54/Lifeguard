@@ -76,23 +76,15 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
                 override fun onNavigationItemSelected(item: MenuItem): Boolean {
                     Log.d(TAG, "onNavigationItemSelected()")
 
-                    var intent: Intent? = null
-
                     when(item.itemId) {
-                        R.id.body_information_setting -> {
-                            Log.d(TAG, "body_information_setting")
-
-                            intent = Intent(applicationContext, UserProfileActivity::class.java)
-                        }
                         R.id.sms_setting -> {
                             Log.d(TAG, "sms_setting")
+                            val intent: Intent = Intent(applicationContext, UserProfileActivity::class.java)
 
-//                            intent = Intent()
+                            startActivity(intent)
+                            overridePendingTransition(R.anim.animation_slide_from_right, R.anim.animation_slide_to_left)
                         }
                     }
-
-                    startActivity(intent)
-                    overridePendingTransition(R.anim.animation_slide_from_right, R.anim.animation_slide_to_left)
 
                     mDrawerLayout.closeDrawers() // Close drawer
 

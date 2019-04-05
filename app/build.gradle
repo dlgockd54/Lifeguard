@@ -40,4 +40,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'jp.wasabeef:glide-transformations:1.0.6'
     implementation 'com.android.support:design:26.1.0'
+    implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
 }
