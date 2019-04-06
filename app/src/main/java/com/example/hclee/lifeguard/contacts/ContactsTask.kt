@@ -2,7 +2,6 @@ package com.example.hclee.lifeguard.contacts
 
 import android.content.Context
 import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
@@ -11,7 +10,7 @@ import android.widget.Toast
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.contacts.listener.ContactsLoadingFinishListener
 import com.example.hclee.lifeguard.database.DatabaseManager
-import com.example.hclee.lifeguard.database.ProfileImageOpenHelper
+import com.example.hclee.lifeguard.database.LifeguardDatabaseOpenHelper
 
 /**
  * Created by hclee on 2019-03-21.
@@ -26,8 +25,7 @@ class ContactsTask(private val mContext: Context, private val mContactsList: Arr
     private val TAG: String = ContactsTask::class.java.simpleName
     private var cursorCount: Int = 0
     private lateinit var mDialog: CustomDialog
-    private val mDatabaseManager: DatabaseManager = DatabaseManager
-    private lateinit var mProfileImageOpenHelper: ProfileImageOpenHelper
+    private lateinit var mOpenHelper: LifeguardDatabaseOpenHelper
 
     override fun onPreExecute() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -38,8 +36,8 @@ class ContactsTask(private val mContext: Context, private val mContactsList: Arr
             }
         }
 
-        mProfileImageOpenHelper = ProfileImageOpenHelper(mContext, DatabaseManager.mDbName, null, 1)
-        DatabaseManager.getDatabase(mProfileImageOpenHelper)
+        mOpenHelper = LifeguardDatabaseOpenHelper(mContext, DatabaseManager.mDbName, null, 1)
+        DatabaseManager.getDatabase(mOpenHelper)
 
         Log.d(TAG, "isShowing(): ${mDialog.isShowing}")
 
@@ -65,8 +63,6 @@ class ContactsTask(private val mContext: Context, private val mContactsList: Arr
      * Only doInBackground() method runs on worker thread, others on main thread.
      */
     override fun doInBackground(vararg params: Void?) {
-//        val nameAndPhoneNumberCursor: Cursor = getNameAndPhoneNumberCursor()
-//        val db: SQLiteDatabase = mDatabaseManager.getDatabase(mProfileImageOpenHelper)
         val nameAndPhoneNumberCursor: Cursor = getNameAndPhoneNumberCursor()
         var progress: Int = 1
 

@@ -17,7 +17,7 @@ import com.bumptech.glide.RequestManager
 import com.example.hclee.lifeguard.AndroidThings
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.database.DatabaseManager
-import com.example.hclee.lifeguard.database.ProfileImageOpenHelper
+import com.example.hclee.lifeguard.database.LifeguardDatabaseOpenHelper
 import com.example.hclee.lifeguard.expandedprofile.ExpandedProfileActivity
 import com.example.hclee.lifeguard.gallery.GalleryActivity
 import kotlinx.android.synthetic.main.activity_edit_profile.*
@@ -30,7 +30,7 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
 
     lateinit var mProfileImageView: ImageView
     lateinit var mChangeTextView: TextView
-    private lateinit var mProfileImageOpenHelper: ProfileImageOpenHelper
+    private lateinit var mOpenHelper: LifeguardDatabaseOpenHelper
     private lateinit var mAndroidThings: AndroidThings
     private lateinit var mProfileImageDrawable: Drawable
     private lateinit var mGlideRequestManager: RequestManager
@@ -51,9 +51,9 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
         mToolbar = (edit_profile_toolbar as Toolbar)
         mProfileImageView = iv_profile_image
         mChangeTextView = tv_change_profile
-        mProfileImageOpenHelper = ProfileImageOpenHelper(this, DatabaseManager.mDbName, null, 1)
+        mOpenHelper = LifeguardDatabaseOpenHelper(this, DatabaseManager.mDbName, null, 1)
         mGlideRequestManager = Glide.with(this)
-        mAndroidThings = EditProfileAndroidThings(this, mProfileImageOpenHelper)
+        mAndroidThings = EditProfileAndroidThings(this, mOpenHelper)
         mPresenter = EditProfilePresenter(this, mAndroidThings)
         mPhoneNumber = intent.getStringExtra("phone_number")
         mProfileImageDrawable = Drawable.createFromStream(contentResolver.openInputStream(Uri.parse(
