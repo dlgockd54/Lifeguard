@@ -1,9 +1,9 @@
-package com.example.hclee.lifeguard.editprofile.listener
+package com.example.hclee.lifeguard.database.listener
 
 /**
  * Created by hclee on 2019-04-03.
  */
 
-interface EditProfileObserverListener {
+interface DatabaseObserverListener {
     fun onChange()
 }

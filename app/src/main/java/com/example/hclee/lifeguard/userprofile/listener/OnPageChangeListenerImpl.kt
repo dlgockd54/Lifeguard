@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.util.Log
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.example.hclee.lifeguard.userprofile.adapter.UserProfilePagerAdapter
 import com.example.hclee.lifeguard.userprofile.fragment.MedicalHistoryFragment
@@ -27,6 +28,11 @@ class OnPageChangeListenerImpl(private val mContext: Context, private val mAdapt
 
         (mContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
             .hideSoftInputFromWindow((currentFragment as MedicalHistoryFragment).mAddEditText.windowToken, 0)
+
+        currentFragment.let {
+            it.mAddButton.visibility = View.INVISIBLE
+            it.mAddEditText.visibility = View.INVISIBLE
+        }
     }
 
     override fun onPageSelected(position: Int) {

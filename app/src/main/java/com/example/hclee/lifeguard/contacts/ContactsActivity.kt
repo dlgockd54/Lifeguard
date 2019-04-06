@@ -1,6 +1,5 @@
 package com.example.hclee.lifeguard.contacts
 
-import android.content.ComponentName
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -20,7 +19,7 @@ import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.contacts.adapter.ContactsViewAdapter
 import com.example.hclee.lifeguard.contacts.listener.ContactsLoadingFinishListener
 import com.example.hclee.lifeguard.database.DatabaseManager
-import com.example.hclee.lifeguard.editprofile.listener.EditProfileObserverListener
+import com.example.hclee.lifeguard.database.listener.DatabaseObserverListener
 import com.example.hclee.lifeguard.userprofile.UserProfileActivity
 import kotlinx.android.synthetic.main.activity_contacts.*
 import kotlinx.android.synthetic.main.content_contacts.*
@@ -41,7 +40,8 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
     private lateinit var mToolbar: Toolbar
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var mNavigationView: NavigationView
-    private val mEditProfileObserverListener: EditProfileObserverListener = object: EditProfileObserverListener {
+    private val mEditProfileObserverListener: DatabaseObserverListener = object:
+        DatabaseObserverListener {
         override fun onChange() {
             setIsNeedToUpdateContactsList(true)
         }

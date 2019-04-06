@@ -13,6 +13,8 @@ interface UserProfileContract {
     }
 
     interface Presenter: BasePresenter {
-
+        fun getMedicalHistoryList(): List<MedicalHistory>
+        fun updateAdapter()
+        fun addMedicalHistoryToDatabse(medicalHistory: MedicalHistory)
     }
 }
