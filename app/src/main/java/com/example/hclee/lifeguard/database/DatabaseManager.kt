@@ -4,7 +4,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.util.Log
-import com.example.hclee.lifeguard.editprofile.listener.EditProfileObserverListener
+import com.example.hclee.lifeguard.database.listener.DatabaseObserverListener
 import java.util.*
 
 /**
@@ -17,23 +17,24 @@ import java.util.*
 object DatabaseManager {
     private val TAG: String = DatabaseManager::class.java.simpleName
     private lateinit var mDb: SQLiteDatabase
-    val mTableName: String = "ProfileImage"
-    val mDbName: String = "profile_image.db"
-    private val mObserverListenerList: LinkedList<EditProfileObserverListener> = LinkedList<EditProfileObserverListener>()
+    val mProfileImageTableName: String = "ProfileImage"
+    val mDbName: String = "lifeguard.db"
+    val mMedicalHistoryTableName: String = "MedicalHistory"
+    private val mObserverListenerList: LinkedList<DatabaseObserverListener> = LinkedList<DatabaseObserverListener>()
 
-    fun getDatabase(openHelper: ProfileImageOpenHelper): SQLiteDatabase {
+    fun getDatabase(openHelper: LifeguardDatabaseOpenHelper): SQLiteDatabase {
         mDb = openHelper.writableDatabase
 
         return mDb
     }
 
-    fun registerObserverListener(listener: EditProfileObserverListener) {
+    fun registerObserverListener(listener: DatabaseObserverListener) {
         Log.d(TAG, "registerObserver")
 
         mObserverListenerList.add(listener)
     }
 
-    fun unregisterObserverListener(listener: EditProfileObserverListener) {
+    fun unregisterObserverListener(listener: DatabaseObserverListener) {
         mObserverListenerList.remove(listener)
     }
 
@@ -53,21 +54,21 @@ object DatabaseManager {
     }
 
     fun getProfileImageCursor(phoneNumber: String): Cursor {
-        val sql: String = "SELECT * FROM $mTableName WHERE phone_number = '$phoneNumber'"
+        val sql: String = "SELECT * FROM $mProfileImageTableName WHERE phone_number = '$phoneNumber'"
         val cursor: Cursor = rawQuery(sql, null)
 
         return cursor
     }
 
     fun updateProfileImageUri(phoneNumber: String, uri: Uri) {
-        val sql: String = "UPDATE $mTableName SET profile_image_uri = '${uri.toString()}' WHERE phone_number = '$phoneNumber'"
+        val sql: String = "UPDATE $mProfileImageTableName SET profile_image_uri = '${uri.toString()}' WHERE phone_number = '$phoneNumber'"
 
         mDb.execSQL(sql)
         notifyChangeToObserverListener()
     }
 
     fun insertProfileImageUri(phoneNumber: String, uri: Uri) {
-        val sql: String = "INSERT INTO ${DatabaseManager.mTableName} VALUES ('$phoneNumber', '${uri.toString()}')"
+        val sql: String = "INSERT INTO $mProfileImageTableName VALUES ('$phoneNumber', '${uri.toString()}')"
 
         mDb.execSQL(sql)
         notifyChangeToObserverListener()
@@ -79,6 +80,13 @@ object DatabaseManager {
         for(observer in mObserverListenerList) {
             observer.onChange()
         }
+    }
+
+    fun insertMedicalHistory(disease: String) {
+        val sql: String = "INSERT INTO $mMedicalHistoryTableName VALUES ('$disease')"
+
+        mDb.execSQL(sql)
+        notifyChangeToObserverListener()
     }
 
     private fun rawQuery(sql: String, selectionArgs: Array<String>?): Cursor {
