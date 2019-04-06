@@ -12,7 +12,6 @@ import com.example.hclee.lifeguard.userprofile.fragment.SMSSettingFragment
 
 class UserProfilePagerAdapter(private val mFragmentManger: FragmentManager): FragmentPagerAdapter(mFragmentManger) {
     private val TAG: String = UserProfilePagerAdapter::class.java.simpleName
-//    private val mFragmentList: ArrayList<Pair<Fragment, String>> = ArrayList<Pair<Fragment, String>>()
     private val mFragmentList: ArrayList<Fragment> = ArrayList<Fragment>()
     private val mPageTitleArr: Array<String> = arrayOf("과거 병력 설정", "문자 메시지 설정")
 
