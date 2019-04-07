@@ -14,7 +14,8 @@ interface UserProfileContract {
 
     interface Presenter: BasePresenter {
         fun getMedicalHistoryList(): List<MedicalHistory>
-        fun updateAdapter()
+        fun pullMedicalHistoryFromDatabase(androidThings: MedicalHistoryAndroidThings)
         fun addMedicalHistoryToDatabse(medicalHistory: MedicalHistory)
+        fun addMedicalHistoryToList(medicalHistory: MedicalHistory)
     }
 }

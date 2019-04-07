@@ -11,6 +11,7 @@ import java.util.*
 class UserProfilePresenter(val mActivity: UserProfileContract.View): UserProfileContract.Presenter {
     private val TAG: String = UserProfilePresenter::class.java.simpleName
     private val mMedicalHistoryList: List<MedicalHistory> = LinkedList<MedicalHistory>()
+    private val mTaskManager: TaskManager = TaskManager()
 
     override fun getMedicalHistoryList(): List<MedicalHistory> {
         return mMedicalHistoryList
@@ -22,7 +23,11 @@ class UserProfilePresenter(val mActivity: UserProfileContract.View): UserProfile
         DatabaseManager.insertMedicalHistory(medicalHistory.mDisease)
     }
 
-    override fun updateAdapter() {
+    override fun pullMedicalHistoryFromDatabase(androidThings: MedicalHistoryAndroidThings) {
+        mTaskManager.pullMedicalHistoryFromDatabase(androidThings)
+    }
 
+    override fun addMedicalHistoryToList(medicalHistory: MedicalHistory) {
+        (mMedicalHistoryList as LinkedList).add(medicalHistory)
     }
 }

@@ -89,6 +89,13 @@ object DatabaseManager {
         notifyChangeToObserverListener()
     }
 
+    fun getMedicalHistoryCursor(): Cursor {
+        val sql: String = "SELECT * FROM $mMedicalHistoryTableName"
+        val cursor: Cursor = rawQuery(sql, null)
+
+        return cursor
+    }
+
     private fun rawQuery(sql: String, selectionArgs: Array<String>?): Cursor {
         return mDb.rawQuery(sql, selectionArgs)
     }

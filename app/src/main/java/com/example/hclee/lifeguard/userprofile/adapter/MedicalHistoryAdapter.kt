@@ -1,12 +1,12 @@
 package com.example.hclee.lifeguard.userprofile.adapter
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.hclee.lifeguard.R
-import com.example.hclee.lifeguard.gallery.adapter.GalleryAdapter
 import com.example.hclee.lifeguard.userprofile.MedicalHistory
 import com.example.hclee.lifeguard.userprofile.UserProfileContract
 
@@ -19,6 +19,8 @@ class MedicalHistoryAdapter(private val mView: UserProfileContract.View, private
     private val TAG: String = MedicalHistoryAdapter::class.java.simpleName
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MedicalHistoryViewHolder {
+        Log.d(TAG, "onCreateViewHolder()")
+
         val view: View = (LayoutInflater.from(parent?.context).inflate(R.layout.medical_history_item, parent, false))
         val viewHolder: MedicalHistoryViewHolder = MedicalHistoryViewHolder(view)
 
@@ -30,10 +32,14 @@ class MedicalHistoryAdapter(private val mView: UserProfileContract.View, private
     }
 
     override fun onBindViewHolder(holder: MedicalHistoryViewHolder?, position: Int) {
+        Log.d(TAG, "onBindViewHolder()")
 
+        holder?.let {
+            it.medicalHistoryView.text = mMedicalHistoryList[position].mDisease
+        }
     }
 
     class MedicalHistoryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val itemView: TextView = itemView.findViewById(R.id.tv_disease)
+        val medicalHistoryView: TextView = itemView.findViewById(R.id.tv_disease)
     }
 }

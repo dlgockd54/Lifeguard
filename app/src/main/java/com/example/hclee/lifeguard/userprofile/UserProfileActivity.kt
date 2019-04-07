@@ -19,7 +19,7 @@ class UserProfileActivity : AppCompatActivity(), UserProfileContract.View {
 
     private lateinit var mToolbar: Toolbar
     private lateinit var mViewPager: ViewPager
-    private lateinit var mAdapter: UserProfilePagerAdapter
+    lateinit var mAdapter: UserProfilePagerAdapter
     private lateinit var mPagerSlidingTab: PagerSlidingTabStrip
     private lateinit var mPageChangeListener: OnPageChangeListenerImpl
 
@@ -33,8 +33,8 @@ class UserProfileActivity : AppCompatActivity(), UserProfileContract.View {
     private fun init() {
         mToolbar = (user_profile_toolbar as Toolbar)
         setSupportActionBar(mToolbar)
-        mPresenter = UserProfilePresenter(this)
         mAdapter = UserProfilePagerAdapter(supportFragmentManager)
+        mPresenter = UserProfilePresenter(this)
         mViewPager = view_pager_user_profile.apply {
             adapter = mAdapter
             currentItem = 0
