@@ -19,6 +19,7 @@ import android.widget.EditText
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.database.DatabaseManager
 import com.example.hclee.lifeguard.database.listener.DatabaseObserverListener
+import com.example.hclee.lifeguard.database.listener.MedicalHistoryObserverListener
 import com.example.hclee.lifeguard.userprofile.*
 import com.example.hclee.lifeguard.userprofile.adapter.MedicalHistoryAdapter
 import com.example.hclee.lifeguard.userprofile.listener.MedicalHistoryLoadListener
@@ -39,10 +40,14 @@ class MedicalHistoryFragment : Fragment() {
     private lateinit var mMedicalHistoryAdapter: MedicalHistoryAdapter
     lateinit var mAddEditText: EditText
     lateinit var mAddButton: Button
+    private val mMedicalHistoryObserverListener: DatabaseObserverListener = object: MedicalHistoryObserverListener {
+        override fun onChange(disease: String) {
+            (mActivity as UserProfileActivity).mPresenter.addMedicalHistoryToList(MedicalHistory(disease))
+            updateAdapter()
+        }
 
-    private val mMedicalHistoryObserverListener: DatabaseObserverListener = object: DatabaseObserverListener {
         override fun onChange() {
-            initAdapter()
+
         }
     }
 

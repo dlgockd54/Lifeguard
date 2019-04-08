@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.util.Log
 import com.example.hclee.lifeguard.database.listener.DatabaseObserverListener
+import com.example.hclee.lifeguard.database.listener.MedicalHistoryObserverListener
 import java.util.*
 
 /**
@@ -64,21 +65,26 @@ object DatabaseManager {
         val sql: String = "UPDATE $mProfileImageTableName SET profile_image_uri = '${uri.toString()}' WHERE phone_number = '$phoneNumber'"
 
         mDb.execSQL(sql)
-        notifyChangeToObserverListener()
+        notifyChangeToObserverListener(uri)
     }
 
     fun insertProfileImageUri(phoneNumber: String, uri: Uri) {
         val sql: String = "INSERT INTO $mProfileImageTableName VALUES ('$phoneNumber', '${uri.toString()}')"
 
         mDb.execSQL(sql)
-        notifyChangeToObserverListener()
+        notifyChangeToObserverListener(uri)
     }
 
-    private fun notifyChangeToObserverListener() {
+    private fun notifyChangeToObserverListener(change: Any) {
         Log.d(TAG, "notifyChangeToObserverListener")
 
         for(observer in mObserverListenerList) {
-            observer.onChange()
+            if(observer is MedicalHistoryObserverListener) {
+                observer.onChange(change as String)
+            }
+            else {
+                observer.onChange()
+            }
         }
     }
 
@@ -86,7 +92,7 @@ object DatabaseManager {
         val sql: String = "INSERT INTO $mMedicalHistoryTableName VALUES ('$disease')"
 
         mDb.execSQL(sql)
-        notifyChangeToObserverListener()
+        notifyChangeToObserverListener(disease)
     }
 
     fun getMedicalHistoryCursor(): Cursor {
