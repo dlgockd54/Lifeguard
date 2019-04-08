@@ -2,7 +2,9 @@ package com.example.hclee.lifeguard.userprofile.fragment
 
 
 import android.content.Context
+import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -49,7 +51,6 @@ class MedicalHistoryFragment : Fragment() {
 
         }
     }
-
     private val mMedicalHistoryLoadListener: MedicalHistoryLoadListener = object: MedicalHistoryLoadListener {
         override fun onMedicalHistoryLoaded(medicalHistory: MedicalHistory) {
             Log.d(TAG, "onMedicalHistoryLoaded()")
@@ -106,7 +107,18 @@ class MedicalHistoryFragment : Fragment() {
                 val disease: String = (mAddEditText.text).toString()
                 val medicalHistory: MedicalHistory = MedicalHistory(disease)
 
-                (mActivity as UserProfileActivity).mPresenter.addMedicalHistoryToDatabse(medicalHistory)
+                try {
+                    (mActivity as UserProfileActivity).mPresenter.addMedicalHistoryToDatabse(medicalHistory)
+                } catch(e: SQLiteConstraintException) {
+                    Log.d(TAG, e.message)
+
+                    Snackbar.make(mLayout, "We already have ${mAddEditText.text} in the list", Snackbar.LENGTH_LONG).apply {
+                        setAction("확인") {
+                            this.dismiss()
+                        }
+                        show()
+                    }
+                }
 
                 mAddButton.visibility = View.INVISIBLE
                 mAddEditText.visibility = View.INVISIBLE
