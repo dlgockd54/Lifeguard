@@ -42,8 +42,7 @@ class MedicalHistoryFragment : Fragment() {
     lateinit var mAddButton: Button
     private val mMedicalHistoryObserverListener: DatabaseObserverListener = object: MedicalHistoryObserverListener {
         override fun onChange(disease: String) {
-            (mActivity as UserProfileActivity).mPresenter.addMedicalHistoryToList(MedicalHistory(disease))
-            updateAdapter()
+            updateAdapter(MedicalHistory(disease))
         }
 
         override fun onChange() {
@@ -55,8 +54,7 @@ class MedicalHistoryFragment : Fragment() {
         override fun onMedicalHistoryLoaded(medicalHistory: MedicalHistory) {
             Log.d(TAG, "onMedicalHistoryLoaded()")
 
-            (mActivity as UserProfileActivity).mPresenter.addMedicalHistoryToList(medicalHistory)
-            updateAdapter()
+            updateAdapter(medicalHistory)
         }
 
         override fun onAllMedicalHistoryLoaded() {
@@ -136,9 +134,10 @@ class MedicalHistoryFragment : Fragment() {
             MedicalHistoryTask((mActivity as UserProfileActivity), mMedicalHistoryLoadListener)))
     }
 
-    private fun updateAdapter() {
+    private fun updateAdapter(medicalHistory: MedicalHistory) {
         Log.d(TAG, "updateAdapter()")
 
+        (mActivity as UserProfileActivity).mPresenter.addMedicalHistoryToList(medicalHistory)
         mMedicalHistoryAdapter.notifyItemInserted(0)
     }
 
