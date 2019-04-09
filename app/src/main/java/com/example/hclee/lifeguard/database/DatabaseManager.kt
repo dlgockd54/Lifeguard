@@ -65,22 +65,32 @@ object DatabaseManager {
         val sql: String = "UPDATE $mProfileImageTableName SET profile_image_uri = '${uri.toString()}' WHERE phone_number = '$phoneNumber'"
 
         mDb.execSQL(sql)
-        notifyChangeToObserverListener(uri)
+        notifyChangeToObserverListener(Change.EDIT, uri)
     }
 
     fun insertProfileImageUri(phoneNumber: String, uri: Uri) {
         val sql: String = "INSERT INTO $mProfileImageTableName VALUES ('$phoneNumber', '${uri.toString()}')"
 
         mDb.execSQL(sql)
-        notifyChangeToObserverListener(uri)
+        notifyChangeToObserverListener(Change.ADD, uri)
     }
 
-    private fun notifyChangeToObserverListener(change: Any) {
+    private fun notifyChangeToObserverListener(notify: Change, change: Any) {
         Log.d(TAG, "notifyChangeToObserverListener")
 
         for(observer in mObserverListenerList) {
             if(observer is MedicalHistoryObserverListener) {
-                observer.onChange(change as String)
+                when(notify) {
+                    Change.ADD -> {
+                        observer.onAdd(change as String)
+                    }
+                    Change.EDIT -> {
+                        observer.onEdit(change as String)
+                    }
+                    Change.REMOVE -> {
+                        observer.onRemove(change as String)
+                    }
+                }
             }
             else {
                 observer.onChange()
@@ -92,7 +102,7 @@ object DatabaseManager {
         val sql: String = "INSERT INTO $mMedicalHistoryTableName VALUES ('$disease')"
 
         mDb.execSQL(sql)
-        notifyChangeToObserverListener(disease)
+        notifyChangeToObserverListener(Change.ADD, disease)
     }
 
     fun getMedicalHistoryCursor(): Cursor {
@@ -100,6 +110,13 @@ object DatabaseManager {
         val cursor: Cursor = rawQuery(sql, null)
 
         return cursor
+    }
+
+    fun removeMedicalHistory(disease: String) {
+        val sql: String = "DELETE FROM $mMedicalHistoryTableName WHERE disease = '$disease'"
+
+        mDb.execSQL(sql)
+        notifyChangeToObserverListener(Change.REMOVE, disease)
     }
 
     private fun rawQuery(sql: String, selectionArgs: Array<String>?): Cursor {

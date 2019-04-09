@@ -5,5 +5,7 @@ package com.example.hclee.lifeguard.database.listener
  */
 
 interface MedicalHistoryObserverListener: DatabaseObserverListener {
-    fun onChange(disease: String)
+    fun onEdit(disease: String)
+    fun onAdd(disease: String)
+    fun onRemove(disease: String)
 }

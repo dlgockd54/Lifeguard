@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.userprofile.MedicalHistory
@@ -17,12 +18,15 @@ import com.example.hclee.lifeguard.userprofile.UserProfileContract
 class MedicalHistoryAdapter(private val mView: UserProfileContract.View, private val mMedicalHistoryList: List<MedicalHistory>)
     : RecyclerView.Adapter<MedicalHistoryAdapter.MedicalHistoryViewHolder>() {
     private val TAG: String = MedicalHistoryAdapter::class.java.simpleName
+    private val mViewHolderList: ArrayList<MedicalHistoryViewHolder> =  ArrayList<MedicalHistoryViewHolder>()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MedicalHistoryViewHolder {
         Log.d(TAG, "onCreateViewHolder()")
 
         val view: View = (LayoutInflater.from(parent?.context).inflate(R.layout.medical_history_item, parent, false))
         val viewHolder: MedicalHistoryViewHolder = MedicalHistoryViewHolder(view)
+
+        mViewHolderList.add(viewHolder)
 
         return viewHolder
     }
@@ -36,10 +40,40 @@ class MedicalHistoryAdapter(private val mView: UserProfileContract.View, private
 
         holder?.let {
             it.medicalHistoryView.text = mMedicalHistoryList[position].mDisease
+            it.removeButton.setOnClickListener {
+                removeViewHolder(holder)
+            }
+        }
+    }
+
+    private fun removeViewHolder(holder: MedicalHistoryViewHolder) {
+        mViewHolderList.remove(holder)
+        mView.mPresenter.removeMedicalHistoryFromDatabase(holder.medicalHistoryView.text.toString())
+
+        if(itemCount == 0) {
+            mViewHolderList.clear()
+        }
+
+        Log.d(TAG, "itemCount: $itemCount")
+        Log.d(TAG, "viewholder size: ${mViewHolderList.size}")
+    }
+
+    fun onEditMenuSelected() {
+        var value: Int = View.VISIBLE
+
+        if(mViewHolderList.size > 0) {
+            if(mViewHolderList[0].removeButton.visibility == View.VISIBLE) {
+                value = View.INVISIBLE
+            }
+        }
+
+        for(viewHolder in mViewHolderList) {
+            viewHolder.removeButton.visibility = value
         }
     }
 
     class MedicalHistoryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val medicalHistoryView: TextView = itemView.findViewById(R.id.tv_disease)
+        val removeButton: Button = itemView.findViewById(R.id.btn_remove_medical_history)
     }
 }

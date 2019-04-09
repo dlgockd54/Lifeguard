@@ -30,4 +30,12 @@ class UserProfilePresenter(val mActivity: UserProfileContract.View): UserProfile
     override fun addMedicalHistoryToList(medicalHistory: MedicalHistory) {
         (mMedicalHistoryList as LinkedList).add(medicalHistory)
     }
+
+    override fun removeMedicalHistoryFromDatabase(disease: String) {
+        DatabaseManager.removeMedicalHistory(disease)
+    }
+
+    override fun removeMedicalHistoryFromList(disease: String) {
+        (mMedicalHistoryList as LinkedList).remove(MedicalHistory(disease))
+    }
 }

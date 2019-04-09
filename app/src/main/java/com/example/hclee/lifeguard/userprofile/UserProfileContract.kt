@@ -17,5 +17,7 @@ interface UserProfileContract {
         fun pullMedicalHistoryFromDatabase(androidThings: MedicalHistoryAndroidThings)
         fun addMedicalHistoryToDatabse(medicalHistory: MedicalHistory)
         fun addMedicalHistoryToList(medicalHistory: MedicalHistory)
+        fun removeMedicalHistoryFromDatabase(disease: String)
+        fun removeMedicalHistoryFromList(disease: String)
     }
 }

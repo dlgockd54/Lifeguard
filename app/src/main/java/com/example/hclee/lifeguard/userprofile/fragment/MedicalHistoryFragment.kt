@@ -11,9 +11,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
@@ -43,8 +41,16 @@ class MedicalHistoryFragment : Fragment() {
     lateinit var mAddEditText: EditText
     lateinit var mAddButton: Button
     private val mMedicalHistoryObserverListener: DatabaseObserverListener = object: MedicalHistoryObserverListener {
-        override fun onChange(disease: String) {
-            updateAdapter(MedicalHistory(disease))
+        override fun onAdd(disease: String) {
+            addToAdapter(MedicalHistory(disease))
+        }
+
+        override fun onEdit(disease: String) {
+
+        }
+
+        override fun onRemove(disease: String) {
+            removeFromAdapter(disease)
         }
 
         override fun onChange() {
@@ -55,7 +61,7 @@ class MedicalHistoryFragment : Fragment() {
         override fun onMedicalHistoryLoaded(medicalHistory: MedicalHistory) {
             Log.d(TAG, "onMedicalHistoryLoaded()")
 
-            updateAdapter(medicalHistory)
+            addToAdapter(medicalHistory)
         }
 
         override fun onAllMedicalHistoryLoaded() {
@@ -69,6 +75,8 @@ class MedicalHistoryFragment : Fragment() {
         val rootView: View = inflater.inflate(R.layout.fragment_medical_history, container, false)
 
         Log.d(TAG, "onCreateView()")
+
+        setHasOptionsMenu(true)
 
         init(rootView)
         DatabaseManager.registerObserverListener(mMedicalHistoryObserverListener)
@@ -146,11 +154,18 @@ class MedicalHistoryFragment : Fragment() {
             MedicalHistoryTask((mActivity as UserProfileActivity), mMedicalHistoryLoadListener)))
     }
 
-    private fun updateAdapter(medicalHistory: MedicalHistory) {
-        Log.d(TAG, "updateAdapter()")
+    private fun addToAdapter(medicalHistory: MedicalHistory) {
+        Log.d(TAG, "addToAdapter()")
 
         (mActivity as UserProfileActivity).mPresenter.addMedicalHistoryToList(medicalHistory)
         mMedicalHistoryAdapter.notifyItemInserted(0)
+    }
+
+    private fun removeFromAdapter(disease: String) {
+        Log.d(TAG, "removeFromAdapter()")
+
+        (mActivity as UserProfileActivity).mPresenter.removeMedicalHistoryFromList(disease)
+        initAdapter()
     }
 
     private fun initAdapter() {
@@ -158,5 +173,25 @@ class MedicalHistoryFragment : Fragment() {
 
         mMedicalHistoryAdapter = MedicalHistoryAdapter((mActivity as UserProfileActivity), (mActivity as UserProfileActivity).mPresenter.getMedicalHistoryList())
         mRecyclerView.adapter = mMedicalHistoryAdapter
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        Log.d(TAG,"onCreateOptionsMenu()")
+
+        inflater?.inflate(R.menu.toolbar_edit, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        Log.d(TAG, "onOptionsItemSelected()")
+
+        when(item?.itemId) {
+            R.id.menu_edit -> {
+                Log.d(TAG, "menu_edit selected")
+
+                mMedicalHistoryAdapter.onEditMenuSelected()
+            }
+        }
+
+        return true
     }
 }
