@@ -23,6 +23,7 @@ object SMSSendManager {
     private var mLocation: Location? = null
     private var mLatitude: Double = -1.0
     private var mLongitude: Double = -1.0
+    private lateinit var mSMSContents: String
 
     init {
         mSmsManager = SmsManager.getDefault()
@@ -31,7 +32,7 @@ object SMSSendManager {
     fun sendSMS(context: Context, phoneNumber: String) {
         Log.d(TAG, "sendSMS()")
 
-        var textMessage: StringBuilder = StringBuilder("위급 상황입니다. 도와주세요. 119에 연락해주세요.")
+        var textMessage: StringBuilder = StringBuilder(mSMSContents)
 
         if(mSmsManager == null) {
             Log.d(TAG, "init mSmsManager")
@@ -78,5 +79,11 @@ object SMSSendManager {
 
             textMessage.append(" 제 현재 위치는 위도: $mLatitude, 경도: $mLongitude 입니다.")
         }
+    }
+
+    fun setSMSContents(contents: String) {
+        Log.d(TAG, "setSMSContents()")
+
+        mSMSContents = contents
     }
 }
