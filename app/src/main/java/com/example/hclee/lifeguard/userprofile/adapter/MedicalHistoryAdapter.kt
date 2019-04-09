@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.RequestManager
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.userprofile.MedicalHistory
 import com.example.hclee.lifeguard.userprofile.UserProfileContract
@@ -15,7 +17,8 @@ import com.example.hclee.lifeguard.userprofile.UserProfileContract
  * Created by hclee on 2019-04-06.
  */
 
-class MedicalHistoryAdapter(private val mView: UserProfileContract.View, private val mMedicalHistoryList: List<MedicalHistory>)
+class MedicalHistoryAdapter(private val mView: UserProfileContract.View, private val mMedicalHistoryList: List<MedicalHistory>,
+                            private val mGlideRequestManager: RequestManager)
     : RecyclerView.Adapter<MedicalHistoryAdapter.MedicalHistoryViewHolder>() {
     private val TAG: String = MedicalHistoryAdapter::class.java.simpleName
     private val mViewHolderList: ArrayList<MedicalHistoryViewHolder> =  ArrayList<MedicalHistoryViewHolder>()
@@ -39,6 +42,10 @@ class MedicalHistoryAdapter(private val mView: UserProfileContract.View, private
         Log.d(TAG, "onBindViewHolder()")
 
         holder?.let {
+            mGlideRequestManager
+                .load(R.raw.disease)
+                .circleCrop()
+                .into(it.diseaseImageView)
             it.medicalHistoryView.text = mMedicalHistoryList[position].mDisease
             it.removeButton.setOnClickListener {
                 removeViewHolder(holder)
@@ -73,6 +80,7 @@ class MedicalHistoryAdapter(private val mView: UserProfileContract.View, private
     }
 
     class MedicalHistoryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        val diseaseImageView: ImageView = itemView.findViewById(R.id.iv_disease)
         val medicalHistoryView: TextView = itemView.findViewById(R.id.tv_disease)
         val removeButton: Button = itemView.findViewById(R.id.btn_remove_medical_history)
     }

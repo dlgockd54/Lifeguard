@@ -15,6 +15,8 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.database.DatabaseManager
@@ -38,6 +40,7 @@ class MedicalHistoryFragment : Fragment() {
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private lateinit var mDividerItemDecoration: DividerItemDecoration
     private lateinit var mMedicalHistoryAdapter: MedicalHistoryAdapter
+    private lateinit var mGlideRequestManager: RequestManager
     lateinit var mAddEditText: EditText
     lateinit var mAddButton: Button
     private val mMedicalHistoryObserverListener: DatabaseObserverListener = object: MedicalHistoryObserverListener {
@@ -101,6 +104,7 @@ class MedicalHistoryFragment : Fragment() {
             layoutManager = mLayoutManager
             addItemDecoration(mDividerItemDecoration)
         }
+        mGlideRequestManager = Glide.with(this)
         initAdapter()
         mAddHistoryButton.run {
             setOnClickListener {
@@ -171,7 +175,9 @@ class MedicalHistoryFragment : Fragment() {
     private fun initAdapter() {
         Log.d(TAG, "initAdapter()")
 
-        mMedicalHistoryAdapter = MedicalHistoryAdapter((mActivity as UserProfileActivity), (mActivity as UserProfileActivity).mPresenter.getMedicalHistoryList())
+        mMedicalHistoryAdapter = MedicalHistoryAdapter((mActivity as UserProfileActivity),
+            (mActivity as UserProfileActivity).mPresenter.getMedicalHistoryList(),
+            mGlideRequestManager)
         mRecyclerView.adapter = mMedicalHistoryAdapter
     }
 
