@@ -109,10 +109,7 @@ class MedicalHistoryFragment : Fragment() {
         initAdapter()
         mAddHistoryButton.run {
             setOnClickListener {
-                if(mAddEditText.visibility == View.INVISIBLE) {
-                    mAddEditText.visibility = View.VISIBLE
-                    mAddButton.visibility = View.VISIBLE
-                }
+                showHideEditText()
             }
         }
         mAddButton.run {
@@ -133,8 +130,8 @@ class MedicalHistoryFragment : Fragment() {
                     }
                 }
 
-                mAddButton.visibility = View.INVISIBLE
-                mAddEditText.visibility = View.INVISIBLE
+                showHideEditText()
+
                 (activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                     .hideSoftInputFromWindow(mAddEditText.windowToken, 0)
             }
@@ -143,8 +140,8 @@ class MedicalHistoryFragment : Fragment() {
             setOnClickListener {
                 Log.d(TAG, "onClick()")
 
-                mAddButton.visibility = View.INVISIBLE
-                mAddEditText.visibility = View.INVISIBLE
+                showHideEditText()
+
                 (activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                     .hideSoftInputFromWindow(mAddEditText.windowToken, 0)
             }
@@ -200,5 +197,17 @@ class MedicalHistoryFragment : Fragment() {
         }
 
         return true
+    }
+
+    private fun showHideEditText() {
+        var visible: Int = View.INVISIBLE
+
+        if(mAddEditText.visibility == View.INVISIBLE) {
+            visible = View.VISIBLE
+        }
+
+        mAddEditText.text.clear()
+        mAddEditText.visibility = visible
+        mAddButton.visibility = visible
     }
 }
