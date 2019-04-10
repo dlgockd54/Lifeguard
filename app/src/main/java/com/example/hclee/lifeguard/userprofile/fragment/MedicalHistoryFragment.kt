@@ -33,6 +33,7 @@ import com.example.hclee.lifeguard.userprofile.listener.MedicalHistoryLoadListen
 class MedicalHistoryFragment : Fragment() {
     private val TAG: String = MedicalHistoryFragment::class.java.simpleName
 
+    private lateinit var mRootView: View
     private lateinit var mAddHistoryButton: Button
     private lateinit var mLayout: ViewGroup
     private lateinit var mActivity: FragmentActivity
@@ -75,30 +76,30 @@ class MedicalHistoryFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView: View = inflater.inflate(R.layout.fragment_medical_history, container, false)
+        mRootView = inflater.inflate(R.layout.fragment_medical_history, container, false)
 
         Log.d(TAG, "onCreateView()")
 
         setHasOptionsMenu(true)
 
-        init(rootView)
+        init()
         DatabaseManager.registerObserverListener(mMedicalHistoryObserverListener)
 
-        return rootView
+        return mRootView
     }
 
-    private fun init(rootView: View) {
+    private fun init() {
         mActivity = activity
-        mAddEditText = rootView.findViewById(R.id.et_add_history)
-        mAddHistoryButton = rootView.findViewById(R.id.btn_add_medical_history)
-        mAddButton = rootView.findViewById(R.id.btn_add)
-        mLayout = rootView.findViewById(R.id.layout_medical_history)
+        mAddEditText = mRootView.findViewById(R.id.et_add_history)
+        mAddHistoryButton = mRootView.findViewById(R.id.btn_add_medical_history)
+        mAddButton = mRootView.findViewById(R.id.btn_add)
+        mLayout = mRootView.findViewById(R.id.layout_medical_history)
         pullMedicalHistoryFromDatabase()
         mLayoutManager = LinearLayoutManager(mActivity).apply {
             orientation = LinearLayoutManager.VERTICAL
         }
         mDividerItemDecoration = DividerItemDecoration(mActivity, (mLayoutManager as LinearLayoutManager).orientation)
-        mRecyclerView = rootView.findViewById(R.id.recycler_view_medical_history)
+        mRecyclerView = mRootView.findViewById(R.id.recycler_view_medical_history)
         mRecyclerView.run {
             setHasFixedSize(true)
             layoutManager = mLayoutManager

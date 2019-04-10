@@ -24,22 +24,23 @@ class SMSSettingFragment : Fragment() {
     private val TAG: String = SMSSettingFragment::class.java.simpleName
     private val key: String = "lifeguard_sms_contents"
 
+    private lateinit var mRootView: View
     private lateinit var mSMSEditText: EditText
     private lateinit var mActivity: UserProfileActivity
     private lateinit var mSharedPreferences: SharedPreferences
     private lateinit var mSharedPreferencesEditor: SharedPreferences.Editor
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView: View = inflater.inflate(R.layout.fragment_smssetting, container, false)
+        mRootView = inflater.inflate(R.layout.fragment_smssetting, container, false)
 
-        init(rootView)
+        init()
         restoreSMSContents()
 
-        return rootView
+        return mRootView
     }
 
-    private fun init(rootView: View) {
-        mSMSEditText = rootView.findViewById(R.id.et_sms_contents)
+    private fun init() {
+        mSMSEditText = mRootView.findViewById(R.id.et_sms_contents)
         mActivity = activity as UserProfileActivity
         mSharedPreferences = mActivity.getSharedPreferences("lifeguard_sms_contents", Context.MODE_PRIVATE)
         mSharedPreferencesEditor = mSharedPreferences.edit()
