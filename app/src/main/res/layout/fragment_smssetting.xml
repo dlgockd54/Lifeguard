@@ -7,13 +7,27 @@
         android:orientation="vertical"
         tools:context=".userprofile.fragment.SMSSettingFragment">
 
-    <TextView
-            android:id="@+id/tv_sms_contents"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="50dp"
-            android:text="@string/sms_contents"/>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/tv_sms_contents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="50dp"
+                android:text="@string/sms_contents"/>
+
+        <Button
+                android:id="@+id/btn_add_medical_history_sms_contents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_medical_history"
+                android:layout_marginLeft="100dp"
+                android:layout_alignBaseline="@id/tv_sms_contents"
+                android:layout_toEndOf="@id/tv_sms_contents"/>
+    </RelativeLayout>
 
     <EditText
             android:id="@+id/et_sms_contents"
