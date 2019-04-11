@@ -160,7 +160,6 @@ class MedicalHistoryFragment : Fragment() {
         Log.d(TAG, "addToAdapter()")
 
         (mActivity as UserProfileActivity).mPresenter.addMedicalHistoryToList(medicalHistory)
-        mMedicalHistoryAdapter.notifyItemInserted(0)
     }
 
     private fun removeFromAdapter(disease: String) {
