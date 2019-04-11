@@ -53,11 +53,11 @@ class ContactsViewAdapter(private val mActivity: ContactsContract.View, private 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ContactsViewAdapter.ContactsViewHolder {
         Log.d(TAG, "onCreateViewHolder()")
 
-        val view: View = ((LayoutInflater.from(parent?.context).inflate(R.layout.item, parent, false)) as SwipeLayout).apply {
-            addSwipeListener(mSwipeListener) // Add listener for swipe layout
-        }
+        val view: View = ((LayoutInflater.from(parent?.context).inflate(R.layout.item, parent, false)) as SwipeLayout)
         val viewHolder: ContactsViewAdapter.ContactsViewHolder = ContactsViewAdapter.ContactsViewHolder(view).apply {
             itemView.run {
+                (this as SwipeLayout).addSwipeListener(mSwipeListener) // Add listener for swipe layout
+
                 setOnClickListener {
                     closeAllItem()
                 }
