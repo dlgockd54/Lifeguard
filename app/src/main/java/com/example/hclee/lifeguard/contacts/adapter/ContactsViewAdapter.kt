@@ -17,13 +17,15 @@ import com.bumptech.glide.RequestManager
 import com.daimajia.swipe.SwipeLayout
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.contacts.*
+import com.example.hclee.lifeguard.editprofile.EditProfileActivity
 import kotlinx.android.synthetic.main.item.view.*
 
 /**
  * Created by hclee on 2019-03-19.
  */
 
-class ContactsViewAdapter(private val mActivity: ContactsContract.View, private val mContactsList: List<ContactsData>, private val mGlideRequestManager: RequestManager): RecyclerView.Adapter<ContactsViewAdapter.ContactsViewHolder>() {
+class ContactsViewAdapter(private val mActivity: ContactsContract.View, private val mContactsList: List<ContactsData>,
+                          private val mGlideRequestManager: RequestManager): RecyclerView.Adapter<ContactsViewAdapter.ContactsViewHolder>() {
     private val TAG: String = ContactsViewAdapter::class.java.simpleName
     private val KEY_INTENT_EXTRA: String = "phone_number"
     private val mSwipeListener: SwipeListenerImpl = SwipeListenerImpl()
@@ -134,7 +136,7 @@ class ContactsViewAdapter(private val mActivity: ContactsContract.View, private 
 
     private fun moveEditProfileActivity(phoneNumber: String) {
         val intent: Intent = Intent()
-        val componentName: ComponentName = ComponentName("com.example.hclee.lifeguard", "com.example.hclee.lifeguard.editprofile.EditProfileActivity")
+        val componentName: ComponentName = ComponentName((mActivity as ContactsActivity).applicationContext, EditProfileActivity::class.java)
         val message: Message = Message.obtain(null, MSG_CLOSE_ITEM)
 
         intent.component = componentName
