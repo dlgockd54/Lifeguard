@@ -1,35 +1,33 @@
 package com.example.hclee.lifeguard.contacts
 
-import com.example.hclee.lifeguard.AndroidThings
+import com.example.hclee.lifeguard.taskmanager.ContactsTaskManager
+import com.example.hclee.lifeguard.taskmanager.TaskManager
 
 /**
  * Created by hclee on 2019-03-19.
  */
 
-class ContactsPresenter(val mContactsView: ContactsContract.View, private val mAndroidThings: AndroidThings): ContactsContract.Presenter {
+class ContactsPresenter(val mContactsView: ContactsContract.View): ContactsContract.Presenter {
     private val TAG: String = ContactsPresenter::class.java.simpleName
-    private val mContactsList: ArrayList<ContactsData>
-    private val mContactsObserverManager: ContactsObserverManager
+    private val mContactsList: ArrayList<ContactsData> = ArrayList<ContactsData>()
+    private val mTaskManager: TaskManager = ContactsTaskManager()
 
-    init {
-        mContactsList = ArrayList<ContactsData>()
-        mContactsObserverManager = ContactsObserverManager.apply {
-            registerObserver((mAndroidThings as ContactsAndroidThings).mContext, this@ContactsPresenter)
-        }
+    override fun registerObserverManager(androidThings: ContactsAndroidThings) {
+        ContactsObserverManager.registerObserver(androidThings, this@ContactsPresenter)
     }
 
-    override fun refreshContactsList() {
+    override fun refreshContactsList(androidThings: ContactsAndroidThings) {
         System.out.println("refreshContactsList()")
 
         mContactsList.clear() // Clear all data of the list
-        mContactsView.getContactsTask().execute() // AsyncTask provided by view
+        mTaskManager.runTask(androidThings)
     }
 
-    override fun initializeContactsList() {
+    override fun initializeContactsList(androidThings: ContactsAndroidThings) {
         System.out.println("initializeContactsList()")
 
         mContactsList.clear()
-        mContactsView.getContactsTask().execute()
+        mTaskManager.runTask(androidThings)
 
         System.out.println("initializeContactsList()")
     }

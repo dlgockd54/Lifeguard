@@ -12,7 +12,7 @@ object ContactsObserverManager {
     private lateinit var mContactsObserver: ContactsObserver
     private lateinit var mPresenter: ContactsPresenter
 
-    fun registerObserver(context: Context, presenter: ContactsPresenter) {
+    fun registerObserver(androidThings: ContactsAndroidThings, presenter: ContactsPresenter) {
         val uri: Uri = android.provider.ContactsContract.CommonDataKinds.Phone.CONTENT_URI
 
         mPresenter = presenter
@@ -22,6 +22,6 @@ object ContactsObserverManager {
             }
         })
 
-        context.contentResolver.registerContentObserver(uri, true, mContactsObserver)
+        androidThings.mContext.contentResolver.registerContentObserver(uri, true, mContactsObserver)
     }
 }

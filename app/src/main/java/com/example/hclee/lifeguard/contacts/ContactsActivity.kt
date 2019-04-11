@@ -36,7 +36,6 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: ContactsViewAdapter
     private lateinit var mGlideRequestManager: RequestManager
-    private lateinit var mAndroidThings: ContactsAndroidThings
     private lateinit var mToolbar: Toolbar
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var mNavigationView: NavigationView
@@ -54,9 +53,10 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
         Log.d(TAG, "onCreate()")
 
         init()
-        DatabaseManager.registerObserverListener(mEditProfileObserverListener) // Register listener, watches changes on database
 
-        mPresenter.initializeContactsList()
+        mPresenter.registerObserverManager(getAndroidThings()) // Register observer, watches contacts changes
+        DatabaseManager.registerObserverListener(mEditProfileObserverListener) // Register listener, watches changes on database
+        mPresenter.initializeContactsList(getAndroidThings())
     }
 
     private fun setToolbar() {
@@ -96,13 +96,12 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
             setOnRefreshListener{
                 Log.d(TAG, "onRefresh()")
 
-                mPresenter.refreshContactsList()
+                mPresenter.refreshContactsList(getAndroidThings())
 
                 isRefreshing = false // After refresh, inform the view should not refresh anymore
             }
         }
-        mAndroidThings = ContactsAndroidThings(this)
-        mPresenter = ContactsPresenter(this, mAndroidThings)
+        mPresenter = ContactsPresenter(this/* , getAndroidThings() */)
         mLayoutManager = LinearLayoutManager(this).apply {
             orientation = LinearLayoutManager.VERTICAL
         }
@@ -115,12 +114,23 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
         mGlideRequestManager = Glide.with(this)
     }
 
-    override fun getContactsTask(): ContactsTask {
+    /**
+     * Allocate ContactsTask, then return it.
+     */
+    private fun getContactsTask(): ContactsTask {
         return ContactsTask(this, mPresenter.getContactsList(), object: ContactsLoadingFinishListener {
             override fun onContactsLoadingFinished() {
                 mPresenter.updateContactsViewAdapter()
             }
         })
+    }
+
+    /**
+     * AsyncTask extended object can't be reused.
+     * Every moment AsyncTask object used return task object included android things.
+     */
+    private fun getAndroidThings(): ContactsAndroidThings {
+        return ContactsAndroidThings(this, getContactsTask())
     }
 
     override fun updateContactsViewAdapter() {
@@ -168,7 +178,7 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
         Log.d(TAG, "onResume()")
 
         if(mIsNeedToUpdateContactsList) {
-            mPresenter.refreshContactsList()
+            mPresenter.refreshContactsList(getAndroidThings())
 
             setIsNeedToUpdateContactsList(false)
         }

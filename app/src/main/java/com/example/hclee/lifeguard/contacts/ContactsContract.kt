@@ -13,14 +13,14 @@ interface ContactsContract {
         fun setIsNeedToUpdateContactsList(need: Boolean)
         fun updateContactsViewAdapter()
         fun switchToAnotherActivity(intent: Intent)
-        fun getContactsTask(): ContactsTask
     }
 
     interface Presenter: BasePresenter {
-        fun refreshContactsList()
+        fun refreshContactsList(androidThings: ContactsAndroidThings)
         fun notifyChange()
         fun getContactsList(): ArrayList<ContactsData>
-        fun initializeContactsList()
+        fun initializeContactsList(androidThings: ContactsAndroidThings)
         fun updateContactsViewAdapter()
+        fun registerObserverManager(androidThings: ContactsAndroidThings)
     }
 }

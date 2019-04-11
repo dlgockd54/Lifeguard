@@ -7,4 +7,4 @@ import com.example.hclee.lifeguard.AndroidThings
  * Created by hclee on 2019-03-28.
  */
 
-data class ContactsAndroidThings(val mContext: Context): AndroidThings
+data class ContactsAndroidThings(val mContext: Context, val mTask: ContactsTask): AndroidThings

@@ -1,7 +1,8 @@
 package com.example.hclee.lifeguard.userprofile
 
-import android.util.Log
 import com.example.hclee.lifeguard.database.DatabaseManager
+import com.example.hclee.lifeguard.taskmanager.MedicalHistoryTaskManager
+import com.example.hclee.lifeguard.taskmanager.TaskManager
 import java.util.*
 
 /**
@@ -11,20 +12,18 @@ import java.util.*
 class UserProfilePresenter(val mActivity: UserProfileContract.View): UserProfileContract.Presenter {
     private val TAG: String = UserProfilePresenter::class.java.simpleName
     private val mMedicalHistoryList: List<MedicalHistory> = LinkedList<MedicalHistory>()
-    private val mTaskManager: TaskManager = TaskManager()
+    private val mTaskManager: TaskManager = MedicalHistoryTaskManager()
 
     override fun getMedicalHistoryList(): List<MedicalHistory> {
         return mMedicalHistoryList
     }
 
     override fun addMedicalHistoryToDatabse(medicalHistory: MedicalHistory) {
-        Log.d(TAG, "addMedicalHistoryToDatabase()")
-
         DatabaseManager.insertMedicalHistory(medicalHistory.mDisease)
     }
 
     override fun pullMedicalHistoryFromDatabase(androidThings: MedicalHistoryAndroidThings) {
-        mTaskManager.pullMedicalHistoryFromDatabase(androidThings)
+        mTaskManager.runTask(androidThings)
     }
 
     override fun addMedicalHistoryToList(medicalHistory: MedicalHistory) {
