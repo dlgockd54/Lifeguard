@@ -1,0 +1,6 @@
+app/build
+.gradle
+.idea
+Lifeguard.iml
+app.iml
+local.properties
