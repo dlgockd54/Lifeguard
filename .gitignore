@@ -1,6 +1,11 @@
-app/build
+app/build/
 .gradle
 .idea
 Lifeguard.iml
 app.iml
 local.properties
+.project
+.settings/
+app/.classpath
+app/.project
+app/.settings/
