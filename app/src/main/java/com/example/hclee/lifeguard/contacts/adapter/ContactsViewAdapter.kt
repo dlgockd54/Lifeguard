@@ -18,6 +18,7 @@ import com.daimajia.swipe.SwipeLayout
 import com.example.hclee.lifeguard.R
 import com.example.hclee.lifeguard.contacts.*
 import com.example.hclee.lifeguard.editprofile.EditProfileActivity
+import com.example.hclee.lifeguard.expandedprofile.ExpandedProfileActivity
 import kotlinx.android.synthetic.main.item.view.*
 
 /**
@@ -105,6 +106,13 @@ class ContactsViewAdapter(private val mActivity: ContactsContract.View, private 
                 .load(mContactsList[position].mProfileThumbnailUri)
                 .circleCrop()
                 .into(it.profileImageView)
+            it.profileImageView.run {
+                setOnClickListener {
+                    Log.d(TAG, "onClick()")
+
+                    moveExpandedProfileActivity(mContactsList[position].mProfileThumbnailUri)
+                }
+            }
             it.nameTextView.text = mContactsList[position].mName
             it.phoneNumberTextView.text = mContactsList[position].mPhoneNumber
         }
@@ -123,6 +131,20 @@ class ContactsViewAdapter(private val mActivity: ContactsContract.View, private 
                 }
             }
         }
+    }
+
+    private fun moveExpandedProfileActivity(profileThumbnailUri: Uri?) {
+        val intent: Intent = Intent()
+        val componentName: ComponentName = ComponentName((mActivity as ContactsActivity).applicationContext, ExpandedProfileActivity::class.java)
+
+        intent.component = componentName
+
+        profileThumbnailUri?.let {
+            Log.d(TAG, "")
+            intent.putExtra("profile_uri", it.toString())
+        }
+
+        mActivity.switchToAnotherActivity(intent)
     }
 
     private fun callClickedPerson(phoneNumber: String) {

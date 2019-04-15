@@ -9,7 +9,6 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.hclee.lifeguard.R
-import com.example.hclee.lifeguard.database.DatabaseManager
 import kotlinx.android.synthetic.main.activity_expanded_profile.*
 
 class ExpandedProfileActivity : AppCompatActivity(), ExpandedProfileContract.View {
@@ -18,7 +17,6 @@ class ExpandedProfileActivity : AppCompatActivity(), ExpandedProfileContract.Vie
     override lateinit var mPresenter: ExpandedProfileContract.Presenter
 
     private lateinit var mToolbar: Toolbar
-    private lateinit var mPhoneNumber: String
     private lateinit var mExpandedProfileImageView: ImageView
     private lateinit var mGlideRequestManager: RequestManager
     private lateinit var mProfileImageUri: Uri
@@ -36,14 +34,13 @@ class ExpandedProfileActivity : AppCompatActivity(), ExpandedProfileContract.Vie
     private fun init() {
         mToolbar = (expanded_profile_image_toolbar as Toolbar)
         mPresenter = ExpandedProfilePresenter(this)
-        mPhoneNumber = intent.getStringExtra("phone_number")
-        mGlideRequestManager = Glide.with(this)
         mExpandedProfileImageView = iv_expanded_profile_image.apply {
             setOnClickListener {
                 onBackPressed()
             }
         }
-        mProfileImageUri = mPresenter.getProfileImageUri(mPhoneNumber)
+        mProfileImageUri = Uri.parse(intent.getStringExtra("profile_uri"))
+        mGlideRequestManager = Glide.with(this)
         mGlideRequestManager
             .load(mProfileImageUri)
             .into(mExpandedProfileImageView)
