@@ -1,8 +1,6 @@
 package com.example.hclee.lifeguard.contacts
 
 import android.content.Intent
-import android.graphics.Color
-import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -53,10 +51,6 @@ class ContactsActivity : AppCompatActivity(), ContactsContract.View {
         setContentView(R.layout.activity_contacts)
 
         Log.d(TAG, "onCreate()")
-
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            window.statusBarColor = Color.rgb(255, 45, 48)
-//        }
 
         init()
 

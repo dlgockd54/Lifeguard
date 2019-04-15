@@ -3,6 +3,7 @@ package com.example.hclee.lifeguard.userprofile.fragment
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -68,6 +69,7 @@ class SMSSettingFragment : Fragment() {
         mSharedPreferences = mActivity.getSharedPreferences("lifeguard_sms_contents", Context.MODE_PRIVATE)
         mSharedPreferencesEditor = mSharedPreferences.edit()
 
+        mSMSEditText.setTextColor(Color.rgb(45, 48, 49))
         mAddHMedicalistorySMSContentsButton.run {
             setOnClickListener {
                 Log.d(TAG, "onCheckChanged()")

@@ -3,6 +3,7 @@ package com.example.hclee.lifeguard.userprofile.fragment
 
 import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -100,6 +101,9 @@ class MedicalHistoryFragment : Fragment() {
         }
         mDividerItemDecoration = DividerItemDecoration(mActivity, (mLayoutManager as LinearLayoutManager).orientation)
         mRecyclerView = mRootView.findViewById(R.id.recycler_view_medical_history)
+        mAddEditText.run {
+            setTextColor(Color.rgb(45, 48, 49))
+        }
         mRecyclerView.run {
             setHasFixedSize(true)
             layoutManager = mLayoutManager
