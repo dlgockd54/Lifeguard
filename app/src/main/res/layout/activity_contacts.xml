@@ -21,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:background="@color/colorToolbar"
             app:menu="@menu/contacts_drawer_menu">
 
     </android.support.design.widget.NavigationView>

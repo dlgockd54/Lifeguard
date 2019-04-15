@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -34,6 +35,10 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate()")
 
         mToolbar = (main_toolbar as Toolbar)
+
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            window.statusBarColor = Color.rgb(255, 45, 48)
+//        }
 
         setSupportActionBar(mToolbar)
 
