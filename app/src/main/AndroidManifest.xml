@@ -43,6 +43,16 @@
         </activity>
         <activity android:name=".userprofile.UserProfileActivity">
         </activity>
+
+        <receiver
+                android:name=".contacts.SMSSendingReceiver"
+                android:enabled="true"
+                android:exported="true">
+
+            <intent-filter>
+                <action android:name="SMS_SENT"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

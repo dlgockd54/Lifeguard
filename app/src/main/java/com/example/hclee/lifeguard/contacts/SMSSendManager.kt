@@ -1,14 +1,13 @@
 package com.example.hclee.lifeguard.contacts
 
 import android.Manifest
-import android.annotation.SuppressLint
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
-import android.os.Bundle
 import android.telephony.SmsManager
 import android.util.Log
 
@@ -62,10 +61,16 @@ object SMSSendManager {
         Log.d(TAG, "전송할 내용: $textMessage")
 
         mSmsManager.let {
+            val intent: Intent = Intent(context, SMSSendingReceiver::class.java).setAction("SMS_SENT")
+            val sentPendingIntent: PendingIntent = PendingIntent.getBroadcast(context,
+                0,
+                intent,
+                0)
+
             it?.sendTextMessage(phoneNumber,
                 null,
                 textMessage.toString(),
-                null,
+                sentPendingIntent,
                 null)
         }
     }
