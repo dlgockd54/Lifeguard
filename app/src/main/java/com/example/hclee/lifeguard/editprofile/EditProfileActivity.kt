@@ -87,9 +87,10 @@ class EditProfileActivity : AppCompatActivity(), EditProfileContract.View {
 
     private fun showProfileImage() {
         val componentName: ComponentName = ComponentName(this, ExpandedProfileActivity::class.java)
+        val profileThumbnailUri: Uri = DatabaseManager.getProfileImageUri(mPhoneNumber)
         val intent: Intent = Intent().apply {
             component = componentName
-            putExtra("phone_number", mPhoneNumber)
+            putExtra("profile_uri", profileThumbnailUri.toString())
         }
 
         startActivity(intent)
